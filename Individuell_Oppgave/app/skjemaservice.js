@@ -25,8 +25,10 @@ var SkjemaService = (function () {
     };
     // Lagrer en søknad. Ferdig.
     SkjemaService.prototype.lagreSoknad = function (soknad) {
+        alert("LAgreservice");
+        alert(soknad.mobiltelefon);
         var body = JSON.stringify(soknad);
-        return this._http.post(this.url, body, this.options)
+        return this._http.post("api/Bruker", body, this.options)
             .map(function (returData) { return returData.toString(); });
     };
     // Endrer søknad -- fungerer

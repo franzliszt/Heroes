@@ -9,7 +9,9 @@ namespace Individuell_Oppgave.Models {
 
         // Fungerer, men burde returnere søknadsID.--string
         public string lagre(Soknad p) {
+            
             using (var db = new DatabaseContext()) {
+                
                 var s = new SoknadDB() {
                     Personnummer = p.personnummer,
                     Mobiltelefon = p.mobiltelefon,

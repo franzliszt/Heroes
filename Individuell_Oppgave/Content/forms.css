@@ -97,3 +97,76 @@ h1 {
 	background-color: yellowgreen;
 	text-align: justify;
 }
+
+/* Velkomstvindu */
+.velkomst {
+    width: 100%;
+    height: 400px;
+    margin-top: 3em;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #333333;
+}
+
+.velkomst h1 {
+    color: tomato;
+}
+
+.velkomst button {
+    margin-top: 20px;
+    width: 200px;
+    height: 50px;
+    color: #333333;
+    background-color: #eaeaea;
+}
+
+.velkomst button:hover {
+    color: #eaeaea;
+    background-color: tomato;
+}
+
+/* Design av feilmeldingboks. */
+.feilbox {
+    width: 600px;
+    margin-left:auto;
+    margin-right: auto;
+    background-color: #111111;
+}
+
+.feilbox h2 {
+    color: #eaeaea;
+}
+
+.feilbox button {
+    width: 100px;
+    color: #222222;
+    background-color: yellowgreen;
+}
+
+.feilbox button:hover {
+    background-color: #222222;
+    color: tomato;
+}
+
+/* Design av ok-boks. */
+.okbox {
+    width: 600px;
+    margin-left:auto;
+    margin-right: auto;
+    background-color: #111111;
+}
+
+.okbox h2 {
+    color: #eaeaea;
+}
+
+.okbox button {
+    width: 100px;
+    color: #222222;
+    background-color: yellowgreen;
+}
+
+.okbox button:hover {
+    background-color: #222222;
+    color: tomato;
+}

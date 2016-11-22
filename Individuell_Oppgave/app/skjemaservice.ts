@@ -21,9 +21,11 @@ export class SkjemaService {
 
    // Lagrer en søknad. Ferdig.
    lagreSoknad(soknad: Soknad): Observable<any> {
+       alert("LAgreservice");
+       alert(soknad.mobiltelefon);
        let body: string = JSON.stringify(soknad);
 
-       return this._http.post(this.url, body, this.options)
+       return this._http.post("api/Bruker", body, this.options)
            .map(returData => returData.toString())
    }
 

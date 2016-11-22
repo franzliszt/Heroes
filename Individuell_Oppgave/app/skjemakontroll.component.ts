@@ -22,6 +22,7 @@ export class SkjemaKontroll implements OnInit {
     finnMinSoknad: boolean;
     feilmelding: boolean;
     velkommen: boolean;
+    okBoks: boolean;
 
     // for feilmeldinger
     melding: string;
@@ -43,11 +44,9 @@ export class SkjemaKontroll implements OnInit {
 
     ngOnInit(): void {
         this.laster = true;
-        this.visKalkulator = false;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
         this.velkommen = true;
-        this.feilmelding = false;
     }
 
     vedSubmit() {
@@ -58,20 +57,10 @@ export class SkjemaKontroll implements OnInit {
         } else {
         // vis feilvindu
             alert("FEIL");
-        }
+        } 
     }
 
-    // fra kalkulatoren
-    tilbakeTilRegisreringsskjema() {
-        this.nullstill();
-        this.visSkjema = true;
-        this.visKalkulator = false;
-        this.skjemaStatus = "registrer";
-        this.finnMinSoknad = false;
-        
-    }
-
-    // ikke ferdig
+    // ferdig
     nullstill() {
         this.skjema.patchValue({ id: "" });
         this.skjema.patchValue({ personnummer: "" });
@@ -113,12 +102,21 @@ export class SkjemaKontroll implements OnInit {
 
     // lagrer en søknad og virker -- ikke ferdig
     lagreSoknad(): void {
+        this.laster = true;
         let soknad = this.opprettSoknad();
-        alert(soknad.personnummer);
+        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
+            soknad.belop == null || soknad.nedbetalingstid == null) {
+            alert("Ingen tomme felter");
+            return;
+        }
         this.service.lagreSoknad(soknad).subscribe(
             retur => alert(retur + "XXXXXXXXXXX ===> OK"),
-            error => alert(<any>error + " FEIL"));
+            error => {
+                this.feil("Klarte ikke å lagre.");
+            });
+        this.laster = false;
     }
+    
 
     // Hjelpemetode for å hente data fra skjemaet.
     private opprettSoknad(): Soknad {
@@ -139,7 +137,6 @@ export class SkjemaKontroll implements OnInit {
         } else {
             this.service.hentSoknad(id).subscribe(
                 retur => {
-                    alert("Inne i henting og fant pnr som er " + retur.personnummer);
                     this.skjema.patchValue({ id: retur.id });
                     this.skjema.patchValue({ personnummer: retur.personnummer });
                     this.skjema.patchValue({ mobiltelefon: retur.mobiltelefon });
@@ -150,12 +147,13 @@ export class SkjemaKontroll implements OnInit {
                     this.skjemaStatus = "endre";
                     this.visSkjema = true;
                 },
-                error => alert(<any>error));
+                error => {
+                    this.feil("Klarte ikke å hente søknad med søknadsnummer: " + id)
+                });
         }
-        
     }
 
-    // Endrer søknad -- virker -- må feilhåndtere
+    // Endrer søknad
     endreMinSoknad() {
         this.service.endreSoknad(this.opprettSoknad())
             .subscribe(
@@ -164,8 +162,9 @@ export class SkjemaKontroll implements OnInit {
                 this.skjemaStatus = "registrer";
                 this.nullstill();
             },
-            error => alert("FEIL"),
-            () => alert("FERDIG"));
+            error => {
+                this.feil("Endring av søknad mislyktes.");
+            });
         
     }
 
@@ -177,12 +176,28 @@ export class SkjemaKontroll implements OnInit {
                 this.skjemaStatus = "registrer";
                 this.nullstill();
             },
-            error => alert("FEIL"),
-            () => alert("FERDIG"));
+            error => {
+                this.feil("Klarte ikke å slette søknad med søknadsnummer " + id);
+            });
     }
 
+    // til skjemaet
     tilbake() {
-        this.visSkjema = true;
+        this.velkommen = false;
+        this.nullstill();
+        this.visKalkulator = false;
+        this.finnMinSoknad = false;
         this.feilmelding = false;
+        this.skjemaStatus = "registrer";
+        this.visSkjema = true;
+    }
+
+    // håndtering av feil-retur
+    feil(inputFeil: string): void {
+        this.finnMinSoknad = false;
+        this.visSkjema = false;
+        this.visKalkulator = false;
+        this.feilmelding = true;
+        this.melding = inputFeil;
     }
 }

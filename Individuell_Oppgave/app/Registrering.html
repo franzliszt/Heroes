@@ -1,4 +1,4 @@
-﻿<div class="jumbotron minjumbotron">
+﻿<div class="jumbotron minjumbotron" *ngIf="!velkommen">
     <h1>Lån penger</h1>
 </div>
 <div *ngIf="!velkommen && !feilmelding">
@@ -17,10 +17,16 @@
 
 <div class="container-fluid">
     <!--VELKOMSTVINDU-->
-    <div class="boxed" *ngIf="velkommen">
-        <h3>Velkommen til Angular2 gjeldsbrev</h3>
+    <div class="jumbotron velkomst" *ngIf="velkommen">
+        <div class="text-justify">
+            <h1>Velkommen til Angular2 gjeldsbrev</h1>
+        </div>
+        
+        <div class="center-block">
+            <button class="btn regbutton" (click)="tilbake()">Gå til søknadsskjema</button>
+        </div>
+        
     </div>
-
 
     
     <!--KALKULATOR-->
@@ -60,11 +66,11 @@
                 </div>
             </div>
         </form>
-        <button class="btn btn-default logbutton" (click)="tilbakeTilRegisreringsskjema()">Til søknadskjema</button>
+        <button class="btn btn-default logbutton" (click)="tilbake()">Til søknadskjema</button>
     </div>
 
     <!--SØKNADSSKJEMA-->
-    <div class="container-fluid"  *ngIf="visSkjema">
+    <div class="container-fluid"  *ngIf="visSkjema && !feilmelding">
         <form [formGroup]="skjema" (ngSubmit)="vedSubmit()" class="register-form">
             <input class="form-control" formControlName="id" type="hidden" #id/>
             <div class="row">
@@ -171,16 +177,17 @@
             </div>
         </form>
 
-        <button class="btn btn-default logbutton" (click)="tilbakeTilRegisreringsskjema()">Til søknadskjema</button>
+        <button class="btn btn-default logbutton" (click)="tilbake()">Til søknadskjema</button>
     </div>
 
-    <div class="container" *ngIf="feilmelding">
-        <div class="row">
-            <div class="center-block">
-                <p>Opps. Dette klarte vi ikke helt...</p>
-                <button class="btn regbutton" (click)="tilbake()">Til skjema</button>
+    <div *ngIf="feilmelding">
+        <div class="jumbotron feilbox">
+            <div>
+                <h2 id="feilmelding">Opps. {{melding}}</h2>
+                <button class="btn regbutton" (click)="tilbake()">Prøv på nytt</button>
             </div>
         </div>
     </div>
+    
     
 </div>
