@@ -1,0 +1,99 @@
+﻿.ng-valid[required], .ng-valid.required  {
+  border-left: 8px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 8px solid #a94442; /* red */
+}
+
+body, html{
+    background-color:#34515E;
+   font-family: 'Open Sans Condensed', sans-serif;
+    font-size: 18px;
+
+}
+
+
+.regbutton{    
+    height: 50px;
+    width: 200px;
+    background-color:tomato;
+    border-radius: 0px;
+    font-size: 18px;
+    color:white;
+    border: none !important;
+    margin-bottom: 5px;
+}
+.regbutton:hover{    
+    color: white;
+    background-color:#aa422f;
+}
+.regbutton:active{    
+    color: white;
+    background-color:#aa422f;
+}
+
+.calcbutton{    
+    height: 50px;
+    width: 200px;
+    background-color:#202020;
+    border-radius: 0px;
+    font-size: 18px;
+    color:tomato;
+    border: none !important;
+    margin-bottom: 5px;
+}
+.calcbutton:hover{    
+    color: #202020;
+    background-color:tomato;
+}
+
+.logbutton{    
+    height: 50px;
+    width: 200px;
+    background-color:yellowgreen;
+    border-radius: 0px;
+    font-size: 18px;
+    color:white;
+    border: none !important;
+    margin-bottom: 5px;
+}
+
+.logbutton:hover{    
+    color: white;
+    background-color:darkolivegreen;
+}
+
+.logbutton:active{    
+    color: white;
+    background-color:darkolivegreen;
+}
+
+.register-form label{
+    color: aliceblue;
+    
+}
+.register-form input{
+    color: #111111;
+    margin-bottom: 5px;
+    width: 430px;
+    height: 40px;
+    border-radius: 0px;
+}
+
+h1 {
+   color: tomato;
+}
+
+.midtstilt {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.boxed {
+    margin-left: auto;
+    margin-right: auto;
+	padding: 1.5em;
+	background-color: yellowgreen;
+	text-align: justify;
+}

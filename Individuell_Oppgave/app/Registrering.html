@@ -1,0 +1,186 @@
+﻿<div class="jumbotron minjumbotron">
+    <h1>Lån penger</h1>
+</div>
+<div *ngIf="!velkommen && !feilmelding">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Forbrukslåner</a>
+            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Hjem</a></li>
+                <li><a href="#" (click)="visMinLaneSoknad()">Hent min lånesøknad</a></li>
+            </ul>
+        </div>
+    </nav>
+</div>
+
+<div class="container-fluid">
+    <!--VELKOMSTVINDU-->
+    <div class="boxed" *ngIf="velkommen">
+        <h3>Velkommen til Angular2 gjeldsbrev</h3>
+    </div>
+
+
+    
+    <!--KALKULATOR-->
+    <div class="col-md-9 col-md-offset-1" *ngIf="visKalkulator">
+        <div class="text-center">
+            <h1>Lånekalkulator</h1>
+        </div>
+        
+        <form [formGroup]="skjema" class="register-form" >
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label>Ønsket lånebeløp</label>
+                    <input class="form-control" formControlName="belop" placeholder="belop" />
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.belop.valid || (skjema.controls.belop.pristine && !submitted)">
+                        Minste beløp er 1000,- og maks 9999999,-. Kun heltall.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label>Nedbetalingstid</label>
+                    <input class="form-control" formControlName="nedbetalingstid" placeholder="nedbetalingstid" />
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.nedbetalingstid.valid || (skjema.controls.nedbetalingstid.pristine && !submitted)">
+                        Nedbetalingstid er fra 1 til 20 år.
+                    </p>
+                </div>
+            </div>
+            <button class="btn btn-default calcbutton" (click)="beregn()">Regn ut avdrag</button>
+            <!--kalkuler avdrag-->
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label>Avdrag per måned</label>
+                    <input class="form-control" formControlName="avdrag" readonly="readonly"/>
+                </div>
+            </div>
+        </form>
+        <button class="btn btn-default logbutton" (click)="tilbakeTilRegisreringsskjema()">Til søknadskjema</button>
+    </div>
+
+    <!--SØKNADSSKJEMA-->
+    <div class="container-fluid"  *ngIf="visSkjema">
+        <form [formGroup]="skjema" (ngSubmit)="vedSubmit()" class="register-form">
+            <input class="form-control" formControlName="id" type="hidden" #id/>
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label for="personnummer">Personnummer</label>
+                    <input class="form-control" name="personnummer"
+                           formControlName="personnummer" placeholder="11 siffer" r/>
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
+                        Kun 11 siffer!
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label>Mobiltelefon</label>
+                    <input class="form-control" formControlName="mobiltelefon" placeholder="Feks. 99887766" />
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.mobiltelefon.valid || (skjema.controls.mobiltelefon.pristine && !submitted)">
+                        Kun 8 siffer!
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label>Epost</label>
+                    <input class="form-control" formControlName="epost" placeholder="Epost" />
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
+                        Epost ugyldig epost!
+                    </p>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label>Ønsket lånebeløp</label>
+                    <input class="form-control" formControlName="belop" placeholder="belop" />
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.belop.valid || (skjema.controls.belop.pristine && !submitted)">
+                        Beløp må være fra 1000 til og med 9999999.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label>Antall år for nedbetaling</label>
+                    <input class="form-control" formControlName="nedbetalingstid" placeholder="nedbetalingstid" />
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.nedbetalingstid.valid || (skjema.controls.nedbetalingstid.pristine && !submitted)">
+                        Nedbetalingstid er obligatorisk og må være fra 1 år til og med 99.
+                    </p>
+                </div>
+            </div>
+
+            <hr />
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
+                    <button type="submit" *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid" 
+                            class="btn btn-default regbutton" title="Registrer søknad">
+                        <span class="glyphicon glyphicon-ok"></span>
+                    </button>
+                    <button type="submit" *ngIf="skjemaStatus=='endre'" title="Endre" [disabled]="!skjema.valid" 
+                            class="btn btn-primary regbutton">
+                        <span class="glyphicon glyphicon-edit"></span>
+                    </button>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <button type="submit" *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid" 
+                            (click)="slettSoknad(id.value)" class="btn btn-default regbutton" title="Slett skjema">
+                        <span class="glyphicon glyphicon-trash"></span>
+                    </button>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <button class="btn btn-default logbutton" (click)="tilKalulator()">Prøv vår lånekalkulator</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+
+    <!--Hent en persons søknad(er)-->
+    <div class="col-md-6 col-md-offset-1" *ngIf="finnMinSoknad">
+        <h1>Hent min søknad</h1>
+        <form [formGroup]="skjema" class="register-form" (ngSumbit)="vedSubmit()">
+            <div class="row">
+                <div class="col-md-4 col-sm-4 col-lg-4">
+                    <label for="belop">Tast inn søknadsnummeret</label>
+                    <input class="form-control" name="id" #data
+                           formControlName="id"  />
+                    <p class="alert alert-warning"
+                       [hidden]="skjema.controls.id.valid || (skjema.controls.id.pristine && !submitted)">
+                        Kun heltall.
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid" class="btn btn-default regbutton" (click)="hentMinSoknad(data.value)">Hent min søknad</button>
+                    <!--<button *ngIf="skjemaStatus=='slett'" [disabled]="!skjema.valid" class="btn btn-default regbutton" (click)="hentMinSoknadForSletting(data.value)">Hent min søknad for sletting</button>-->
+                </div>
+            </div>
+        </form>
+
+        <button class="btn btn-default logbutton" (click)="tilbakeTilRegisreringsskjema()">Til søknadskjema</button>
+    </div>
+
+    <div class="container" *ngIf="feilmelding">
+        <div class="row">
+            <div class="center-block">
+                <p>Opps. Dette klarte vi ikke helt...</p>
+                <button class="btn regbutton" (click)="tilbake()">Til skjema</button>
+            </div>
+        </div>
+    </div>
+    
+</div>
