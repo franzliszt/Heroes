@@ -31,7 +31,7 @@ export class SkjemaKontroll implements OnInit {
     constructor(private fb: FormBuilder, private service: SkjemaService) {
         this.skjema = fb.group({
             id: ["", Validators.pattern("[0-9]{1,1000}")],
-            personnummer: ["", Validators.compose([Validators.required, Validators.pattern("[0-9]{11}")])],
+            personnummer: ["", Validators.pattern("[0-9]{11}")],
             mobiltelefon: ["", Validators.pattern("[0-9]{8}")],
             // ikke helt bra -- epost
             epost: ["", Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")],
@@ -45,8 +45,8 @@ export class SkjemaKontroll implements OnInit {
         this.laster = true;
         this.visKalkulator = false;
         this.skjemaStatus = "registrer";
-        this.visSkjema = true;
-        this.velkommen = false;
+        this.visSkjema = false;
+        this.velkommen = true;
         this.feilmelding = false;
     }
 
