@@ -25,7 +25,8 @@ export class SkjemaService {
        let body: string = JSON.stringify(soknad);
 
        return this._http.post("api/Bruker", body, this.options)
-           .map(returData => returData.toString())
+           .map((returData: Response) => returData.json())
+           .catch((error: any) => Observable.throw(error.json().error || "Feil med server."));
    }
 
    // Endrer søknad -- fungerer

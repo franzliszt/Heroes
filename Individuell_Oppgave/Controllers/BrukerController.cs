@@ -67,11 +67,12 @@ namespace Individuell_Oppgave.Controllers {
         public HttpResponseMessage Post([FromBody]Soknad nySoknad) {
             if (ModelState.IsValid) {
                 
-                string soknadsNr = new DB().lagre(nySoknad);
+                Soknad soknadsNr = new DB().lagre(nySoknad);
                 if (soknadsNr != null) {
+                    var j = new JavaScriptSerializer();
+                    string jsonstring = j.Serialize(soknadsNr);
                     return new HttpResponseMessage() {
-                        StatusCode = HttpStatusCode.OK,
-                        Content = new StringContent(soknadsNr)
+                        Content = new StringContent(jsonstring, Encoding.UTF8, "application/json"), StatusCode = HttpStatusCode.OK
                     };
                 }
             }

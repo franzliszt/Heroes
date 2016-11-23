@@ -1,7 +1,4 @@
-﻿<!--<div class="jumbotron minjumbotron" *ngIf="!velkommen">
-    <h1>Lån penger</h1>
-</div>-->
-<div *ngIf="!velkommen && !status">
+﻿<div *ngIf="!velkommen && !status">
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -22,7 +19,7 @@
             <h1>Velkommen til Angular2 gjeldsbrev</h1>
         </div>
         <div class="center-block">
-            <button class="btn regbutton" (click)="tilbake()">Gå til søknadsskjema</button>
+            <button class="btn regbutton" (click)="tilbake()">Gå til lånekalkulator</button>
         </div>
     </div>
 
@@ -41,16 +38,21 @@
                     <input type="range" min="10000" max="700000" [(ngModel)]="belop" 
                            (ngModel)="avdrag" step="5000" (mousedown)="ut()" (mouseup)="ut()" />
                 </div>
-                <input id="boksinput" value="{{ belop }}" />
+                <div>
+                    <input id="boksinput" value="{{ belop }}" />
+                </div>
+                
             </div>
             <div>
                 <h3 class="kategori">Nedbetalingstid</h3>
                 <div class="venstre-label">3 år</div>
                 <div class="hoyre-label">20 år</div>
                 <div>
-                    <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" (mouseup)="ut()" />
+                    <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" (mousedown)="ut()" (mouseup)="ut()" />
                 </div>
-                <input id=boksinput value="{{ tid }}" />
+                <div>
+                    <input id=boksinput value="{{ tid }}" />
+                </div>
             </div>
             <div class="info">
                 <h2 style="color:#eaeaea;">{{ avdrag }} kr <small style="color:#eaeaea;">pr mnd</small></h2>
@@ -69,11 +71,11 @@
             Ønsket lånebeløp <input id="boksinput" value="{{ belop }}" /> kr.
         </p>
 
-        <form [formGroup]="skjema" (ngSubmit)="vedSubmit()" class="register-form">
+        <form [formGroup]="skjema"  class="register-form">
             <input class="form-control" formControlName="id" type="hidden" #id />
             <div class="inputPersonalia">Personnummer</div>
             <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" />
-            <p class="alert alert-warning"
+            <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                 Kun 11 siffer!
             </p>
@@ -101,27 +103,30 @@
             <hr />
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
-                    <button type="submit" *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid"
-                            class="btn btn-default regbutton" title="Registrer søknad">
+                    <button *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid"
+                            class="btn btn-default regbutton" (click)="lagreSoknad()" title="Registrer søknad">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
-                    <button type="submit" *ngIf="skjemaStatus=='endre'" title="Bekreft endring" [disabled]="!skjema.valid"
-                            class="btn btn-primary regbutton">
+                    <button *ngIf="skjemaStatus=='endre'" title="Bekreft endring" [disabled]="!skjema.valid"
+                            class="btn btn-primary regbutton" (click)="endreMinSoknad()">
                         <span class="glyphicon glyphicon-edit"> Endre</span>
                     </button>
                     <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
                             (click)="slettSoknad(id.value)" class="btn btn-default regbutton" title="Slett søknad">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
+                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
+                            (click)="avbryt()" class="btn btn-default regbutton" title="Avbryt">
+                        <span class="glyphicon glyphicon-remove">Avbryt</span>
+                    </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button class="btn btn-default logbutton" (click)="tilbake()">Endre lånebeløp</button>
+                    <button class="btn btn-default logbutton" (click)="tilbake()">Endre lånebeløpet her</button>
                 </div>
             </div>
-
         </form>
     </div>
 
@@ -136,14 +141,14 @@
                            formControlName="id" />
                     <p class="alert alert-warning"
                        [hidden]="skjema.controls.id.valid || (skjema.controls.id.pristine && !submitted)">
-                        Kun heltall.
+                        Kun heltall. Maks 10 siffer og mimimum 1 siffer.
                     </p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid" class="btn btn-default regbutton" (click)="hentMinSoknad(data.value)">Hent min søknad</button>
-                    <!--<button *ngIf="skjemaStatus=='slett'" [disabled]="!skjema.valid" class="btn btn-default regbutton" (click)="hentMinSoknadForSletting(data.value)">Hent min søknad for sletting</button>-->
+                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid" 
+                            class="btn btn-default regbutton" (click)="hentMinSoknad(data.value)">Hent min søknad</button>
                 </div>
             </div>
         </form>
@@ -155,7 +160,16 @@
         <div class="jumbotron feilbox">
             <div>
                 <h2 id="feilmelding">Opps. {{melding}}</h2>
-                <button class="btn regbutton" (click)="tilbake()">Prøv på nytt</button>
+                <button class="btn regbutton" (click)="tilbake()">Ok</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="okBoks">
+        <div class="jumbotron okbox">
+            <div>
+                <h2 id="melding">{{melding}}</h2>
+                <button class="btn regbutton" (click)="tilbake()">Ok</button>
             </div>
         </div>
     </div>

@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnChanges, Input} from "@angular/core";
+﻿import { Component, OnInit, OnChanges, Input, SimpleChanges} from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
 import "rxjs/add/operator/map";
 import { Soknad } from "./soknad";
@@ -11,7 +11,7 @@ import { SkjemaService } from "./skjemaservice";
     providers: [SkjemaService],
 })
 
-export class SkjemaKontroll implements OnChanges {
+export class SkjemaKontroll implements OnInit, OnChanges {
 // startverdier på slider
     belop: number = 150000;
     tid: number = 5;
@@ -26,17 +26,18 @@ export class SkjemaKontroll implements OnChanges {
     skjemaStatus: string;
     finnMinSoknad: boolean;
     status: boolean;
-    velkommen: boolean;
+    velkommen: boolean; // ta bort?
     okBoks: boolean;
 
-    // for feilmeldinger
+
+    // for tilbakemeldinger
     melding: string;
 
     skjema: FormGroup;
 
     constructor(private fb: FormBuilder, private service: SkjemaService) {
         this.skjema = fb.group({
-            id: ["", Validators.pattern("[0-9]{1,1000}")],
+            id: ["", Validators.pattern("[0-9]{1,10}")],
             personnummer: ["", Validators.pattern("[0-9]{11}")],
             mobiltelefon: ["", Validators.pattern("[0-9]{8}")],
             // ikke helt bra -- epost
@@ -49,8 +50,8 @@ export class SkjemaKontroll implements OnChanges {
 
     @Input() // ikke ferdig
     prop: number;
-    ngOnChanges(changes: any): void {
-        alert("JA");
+    ngOnChanges(changes: SimpleChanges) {
+        alert(changes[this.belop]);
     }
 
     ngOnInit(): void {
@@ -60,18 +61,16 @@ export class SkjemaKontroll implements OnChanges {
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
-        this.velkommen = false;
-        this.visKalkulator = true;
+        this.velkommen = true;
+        this.visKalkulator = false;
     }
 
     vedSubmit(): void {
         if (this.skjemaStatus == "registrer") {
             this.lagreSoknad();
-        } else if (this.skjemaStatus == "endre") {
-            this.endreMinSoknad();
         } else {
-        // vis feilvindu
-            alert("FEIL");
+            this.statusmelding("Opps. Her gikk det virkelig galt. Vi holder på å reparere problemet.\n"
+                + "Vennligst prøv igjen senere.");
         } 
     }
 
@@ -122,15 +121,17 @@ export class SkjemaKontroll implements OnChanges {
 
     // lagrer en søknad og virket -- ikke ferdig
     lagreSoknad(): void {
+        alert("Inn");
         this.laster = true;
         let soknad = this.opprettSoknad();
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
             soknad.belop == null || soknad.nedbetalingstid == null) {
-            alert("Ingen tomme felter");
+            this.skjema.patchValue({ personnummer: " " });
             return;
         }
         this.service.lagreSoknad(soknad).subscribe(
-            retur => alert(retur + "XXXXXXXXXXX ===> OK"),
+            retur => this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" + 
+                        "Vennligst husk dette for fremtidig endring/visning av søknaden."),
             error => {
                 this.statusmelding("Klarte ikke å lagre.");
             });
@@ -147,14 +148,13 @@ export class SkjemaKontroll implements OnChanges {
         soknad.belop = this.belop;
         soknad.nedbetalingstid = this.tid;
         soknad.avdragPrMnd = this.avdrag;
-        alert(soknad.avdragPrMnd + " " + soknad.belop + " " + soknad.nedbetalingstid);
         return soknad;
     }
 
     // virker 
-    hentMinSoknad(id) {
+    hentMinSoknad(id): void {
         if (id == "") {
-            alert("Feltet er tomt");
+            return;
         } else {
             this.service.hentSoknad(id).subscribe(
                 retur => {
@@ -172,20 +172,21 @@ export class SkjemaKontroll implements OnChanges {
                     this.visSkjema = true;
                 },
                 error => {
-                    this.statusmelding("Klarte ikke å hente søknad med søknadsnummer: " + id)
+                    this.statusmelding("Klarte ikke å hente søknad med søknadsnummer: " + id +
+                        "\nVennligst kontroller ditt søknadsnummer.");
                 });
         }
     }
 
     // Endrer søknad
-    endreMinSoknad() {
+    endreMinSoknad(): void {
         alert("HER?");
         let soknad = this.opprettSoknad();
         soknad.id = this.skjema.value.id;
         this.service.endreSoknad(soknad)
             .subscribe(
             retur => {
-                this.statusmelding("Søknad lagret. Se dine søknader ved å bruke ditt personnummer.");
+                this.ok("Søknad med søknadsnummer " + soknad.id + " er endret.");
                 this.skjemaStatus = "registrer";
                 this.nullstill();
             },
@@ -195,11 +196,11 @@ export class SkjemaKontroll implements OnChanges {
     }
 
     // Fungerer.
-    slettSoknad(id) {
+    slettSoknad(id): void {
         this.service.slettSoknad(id)
             .subscribe(
             retur => {
-                alert("Sletting ok");
+                this.ok("Søknad slettet");
                 this.skjemaStatus = "registrer";
                 this.nullstill();
             },
@@ -210,12 +211,13 @@ export class SkjemaKontroll implements OnChanges {
 
 
     // til kalkulator
-    tilbake() {
+    tilbake(): void {
         this.velkommen = false;
         this.visKalkulator = true;
         this.finnMinSoknad = false;
         this.status = false;
         this.visSkjema = false;
+        this.okBoks = false;
     }
 
     // håndtering av feil-retur
@@ -225,5 +227,21 @@ export class SkjemaKontroll implements OnChanges {
         this.visKalkulator = false;
         this.status = true;
         this.melding = inputFeil;
+    }
+
+    ok(okMelding: string): void {
+        this.finnMinSoknad = false;
+        this.visSkjema = false;
+        this.visKalkulator = false;
+        this.okBoks = true;
+        this.melding = okMelding;
+        this.nullstill();
+    }
+
+    avbryt() {
+        this.skjemaStatus = "registrer";
+        this.nullstill();
+        this.visSkjema = false;
+        this.visKalkulator = true;
     }
 }

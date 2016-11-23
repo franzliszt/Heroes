@@ -28,7 +28,8 @@ var SkjemaService = (function () {
         alert("LAgreservice");
         var body = JSON.stringify(soknad);
         return this._http.post("api/Bruker", body, this.options)
-            .map(function (returData) { return returData.toString(); });
+            .map(function (returData) { return returData.json(); })
+            .catch(function (error) { return Observable_1.Observable.throw(error.json().error || "Feil med server."); });
     };
     // Endrer søknad -- fungerer
     SkjemaService.prototype.endreSoknad = function (endretSoknad) {

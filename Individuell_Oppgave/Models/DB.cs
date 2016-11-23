@@ -8,23 +8,23 @@ namespace Individuell_Oppgave.Models {
     public class DB {
 
         // Fungerer, men burde returnere søknadsID.--string
-        public string lagre(Soknad p) {
+        public Soknad lagre(Soknad nySoknad) {
             
             using (var db = new DatabaseContext()) {
                 
                 var s = new SoknadDB() {
-                    Personnummer = p.personnummer,
-                    Mobiltelefon = p.mobiltelefon,
-                    Epost = p.epost,
-                    Belop = p.belop,
-                    Nedbetalingstid = p.nedbetalingstid,
-                    AvdragPrMnd = p.avdragPrMnd
+                    Personnummer = nySoknad.personnummer,
+                    Mobiltelefon = nySoknad.mobiltelefon,
+                    Epost = nySoknad.epost,
+                    Belop = nySoknad.belop,
+                    Nedbetalingstid = nySoknad.nedbetalingstid,
+                    AvdragPrMnd = nySoknad.avdragPrMnd
                 };
                 try {
                     db.Soknader.Add(s);
-                    string soknadsNr = s.SoknadsID.ToString();
                     db.SaveChanges();
-                    return soknadsNr;
+                    nySoknad.id = s.SoknadsID;
+                    return nySoknad;
                 } catch (Exception e) {
                     return null;
                 }
