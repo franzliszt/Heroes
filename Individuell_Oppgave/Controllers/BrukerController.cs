@@ -64,15 +64,14 @@ namespace Individuell_Oppgave.Controllers {
 
         // LAGRE
         [HttpPost]
-        public HttpResponseMessage Post([FromBody]Soknad p) {
-            Debug.WriteLine("XXXXXXXXXXXXXXXXXXX I POST før modelstate " + p.mobiltelefon);
+        public HttpResponseMessage Post([FromBody]Soknad nySoknad) {
             if (ModelState.IsValid) {
-                Debug.WriteLine("XXXXXXXXXXXXXXXXXXX I POST inne i modelstate");
-                string soknadsNr = new DB().lagre(p);
+                
+                string soknadsNr = new DB().lagre(nySoknad);
                 if (soknadsNr != null) {
                     return new HttpResponseMessage() {
                         StatusCode = HttpStatusCode.OK,
-                        Content = new StringContent("OK")
+                        Content = new StringContent(soknadsNr)
                     };
                 }
             }

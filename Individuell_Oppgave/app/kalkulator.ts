@@ -1,9 +1,9 @@
 ﻿export class Kalkulator {
-private rentefot = 0.07;
+    private rentefot = 0.07;
 
     beregn(belop: number, tid: number): number {
-        let antallTerminer = 12 * tid;
-        let rPrTermin = this.rentefot / 12;
-        return 0;
+        let y = (this.rentefot * belop) /
+            (1 - Math.pow((1 + this.rentefot), -tid));
+        return parseFloat((y / 12).toFixed(2));
     }
 }

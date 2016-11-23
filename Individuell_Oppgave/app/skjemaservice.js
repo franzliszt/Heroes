@@ -23,10 +23,9 @@ var SkjemaService = (function () {
     SkjemaService.prototype.feil = function (error) {
         return Promise.reject(error.message || error);
     };
-    // Lagrer en søknad. Ferdig.
+    // Lagrer en søknad. -- (fortsetter å feile)
     SkjemaService.prototype.lagreSoknad = function (soknad) {
         alert("LAgreservice");
-        alert(soknad.mobiltelefon);
         var body = JSON.stringify(soknad);
         return this._http.post("api/Bruker", body, this.options)
             .map(function (returData) { return returData.toString(); });

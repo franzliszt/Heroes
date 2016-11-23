@@ -19,10 +19,9 @@ export class SkjemaService {
        return Promise.reject(error.message || error);
    }
 
-   // Lagrer en søknad. Ferdig.
-   lagreSoknad(soknad: Soknad): Observable<any> {
+   // Lagrer en søknad. -- (fortsetter å feile)
+   lagreSoknad(soknad: Soknad): any {
        alert("LAgreservice");
-       alert(soknad.mobiltelefon);
        let body: string = JSON.stringify(soknad);
 
        return this._http.post("api/Bruker", body, this.options)
