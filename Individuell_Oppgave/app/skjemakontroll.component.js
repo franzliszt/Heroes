@@ -114,7 +114,6 @@ var SkjemaKontroll = (function () {
     // Hjelpemetode for å hente data fra skjemaet.
     SkjemaKontroll.prototype.opprettSoknad = function () {
         var soknad = new soknad_1.Soknad();
-        //soknad.id = 
         soknad.personnummer = this.skjema.value.personnummer;
         soknad.mobiltelefon = this.skjema.value.mobiltelefon;
         soknad.epost = this.skjema.value.epost;
@@ -139,7 +138,8 @@ var SkjemaKontroll = (function () {
                 _this.skjema.patchValue({ belop: retur.belop });
                 _this.belop = retur.belop;
                 _this.tid = retur.nedbetalingstid;
-                _this.skjema.patchValue({ nedbetalingstid: _this.tid });
+                _this.avdrag = retur.avdragPrMnd;
+                //this.skjema.patchValue({ nedbetalingstid: this.tid });
                 _this.finnMinSoknad = false;
                 _this.skjemaStatus = "endre";
                 _this.visSkjema = true;
@@ -153,6 +153,7 @@ var SkjemaKontroll = (function () {
         var _this = this;
         alert("HER?");
         var soknad = this.opprettSoknad();
+        soknad.id = this.skjema.value.id;
         this.service.endreSoknad(soknad)
             .subscribe(function (retur) {
             _this.statusmelding("Søknad lagret. Se dine søknader ved å bruke ditt personnummer.");
@@ -187,7 +188,7 @@ var SkjemaKontroll = (function () {
         this.finnMinSoknad = false;
         this.visSkjema = false;
         this.visKalkulator = false;
-        this.feilmelding = true;
+        this.status = true;
         this.melding = inputFeil;
     };
     __decorate([

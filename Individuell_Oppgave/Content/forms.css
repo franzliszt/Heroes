@@ -316,3 +316,17 @@ input[type=range]:focus::-ms-fill-upper {
     color: #eaeaea;
     font-size: 1.5em;
 }
+
+#litentekst {
+    color: #444444;
+    font-size: .5em;
+}
+
+.boks .kategori {
+    color: #eaeaea;
+}
+
+.header {
+    color: #eaeaea;
+    margin-bottom: 50px;
+}

@@ -141,7 +141,6 @@ export class SkjemaKontroll implements OnChanges {
     // Hjelpemetode for å hente data fra skjemaet.
     private opprettSoknad(): Soknad {
         let soknad = new Soknad();
-        //soknad.id = 
         soknad.personnummer = this.skjema.value.personnummer;
         soknad.mobiltelefon = this.skjema.value.mobiltelefon;
         soknad.epost = this.skjema.value.epost;
@@ -166,7 +165,8 @@ export class SkjemaKontroll implements OnChanges {
                     this.skjema.patchValue({ belop: retur.belop });
                     this.belop = retur.belop;
                     this.tid = retur.nedbetalingstid;
-                    this.skjema.patchValue({ nedbetalingstid: this.tid });
+                    this.avdrag = retur.avdragPrMnd;
+                    //this.skjema.patchValue({ nedbetalingstid: this.tid });
                     this.finnMinSoknad = false;
                     this.skjemaStatus = "endre";
                     this.visSkjema = true;
@@ -181,6 +181,7 @@ export class SkjemaKontroll implements OnChanges {
     endreMinSoknad() {
         alert("HER?");
         let soknad = this.opprettSoknad();
+        soknad.id = this.skjema.value.id;
         this.service.endreSoknad(soknad)
             .subscribe(
             retur => {
@@ -222,7 +223,7 @@ export class SkjemaKontroll implements OnChanges {
         this.finnMinSoknad = false;
         this.visSkjema = false;
         this.visKalkulator = false;
-        this.feilmelding = true;
+        this.status = true;
         this.melding = inputFeil;
     }
 }

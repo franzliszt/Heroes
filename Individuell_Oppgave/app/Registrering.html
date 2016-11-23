@@ -1,6 +1,6 @@
-﻿<div class="jumbotron minjumbotron" *ngIf="!velkommen">
+﻿<!--<div class="jumbotron minjumbotron" *ngIf="!velkommen">
     <h1>Lån penger</h1>
-</div>
+</div>-->
 <div *ngIf="!velkommen && !status">
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
@@ -30,9 +30,11 @@
     <!--KALKULATOR-->
     <div *ngIf="visKalkulator && !status">
         <div class="boks">
-            <h2 style="color:#eaeaea;">Lån inntil 700 000 kroner!</h2>
+            <div class="text-left">
+                <h1 class="header">Lån inntil 700 000 kroner!</h1>
+            </div>
             <div>
-                <h3 style="color:#eaeaea;">Lånebeløp</h3>
+                <h3 class="kategori">Lånebeløp</h3>
                 <div class="venstre-label">10 000 kr</div>
                 <div class="hoyre-label">700 000 kr</div>
                 <div>
@@ -42,7 +44,7 @@
                 <input id="boksinput" value="{{ belop }}" />
             </div>
             <div>
-                <h3>Nedbetalingstid</h3>
+                <h3 class="kategori">Nedbetalingstid</h3>
                 <div class="venstre-label">3 år</div>
                 <div class="hoyre-label">20 år</div>
                 <div>
@@ -51,11 +53,13 @@
                 <input id=boksinput value="{{ tid }}" />
             </div>
             <div class="info">
-                <h2 style="color:#eaeaea;">{{ avdrag }} <small>pr mnd</small></h2>
-                <h3>Rente: 7%</h3>
+                <h2 style="color:#eaeaea;">{{ avdrag }} kr <small style="color:#eaeaea;">pr mnd</small></h2>
+            </div>
+            <div id="litentekst">
+                <p><small>* Effektiv rente 7%. <br />Ved å trykke "søk nå" godtar du mine vilkår.</small></p>
             </div>
         </div>
-        <button class="btn btn-default logbutton" (click)="tilSkjema()">Til søknadskjema</button>
+        <button class="btn btn-default logbutton" (click)="tilSkjema()">Søk nå</button>
     </div>
 
 
@@ -88,13 +92,12 @@
                 Ugyldig epost!
             </p>
 
-            <div class="inputPersonalia">Nedbetalingstid</div>
-            <input class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
-            <p class="alert alert-warning"
-               [hidden]="skjema.controls.nedbetalingstid.valid || (skjema.controls.nedbetalingstid.pristine && !submitted)">
-                Kun 11 siffer!
-            </p>
-
+            
+            <input type="hidden" class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
+            <input type="hidden" class="form-control" name="belop" formControlName="belop" placeholder="8 siffer" />
+            <input type="hidden" class="form-control" name="avdrag" formControlName="avdrag" placeholder="8 siffer" />
+            
+            <p style="color:#eaeaea;">Nedbetaling over {{tid}} år. Avdrag {{avdrag}} kr/mnd.</p>
             <hr />
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
@@ -102,16 +105,17 @@
                             class="btn btn-default regbutton" title="Registrer søknad">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
-                    <button type="submit" *ngIf="skjemaStatus=='endre'" title="Endre" [disabled]="!skjema.valid"
+                    <button type="submit" *ngIf="skjemaStatus=='endre'" title="Bekreft endring" [disabled]="!skjema.valid"
                             class="btn btn-primary regbutton">
-                        <span class="glyphicon glyphicon-edit"></span>
+                        <span class="glyphicon glyphicon-edit"> Endre</span>
+                    </button>
+                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
+                            (click)="slettSoknad(id.value)" class="btn btn-default regbutton" title="Slett søknad">
+                        <span class="glyphicon glyphicon-trash"></span>
                     </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
-                            (click)="slettSoknad(id.value)" class="btn btn-default regbutton" title="Slett skjema">
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </button>
+                    
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <button class="btn btn-default logbutton" (click)="tilbake()">Endre lånebeløp</button>
@@ -144,7 +148,7 @@
             </div>
         </form>
 
-        <button class="btn btn-default logbutton" (click)="tilbake()">Til kalkulator</button>
+        <button class="btn btn-default logbutton" (click)="tilbake()">Søk om lån</button>
     </div>
 
     <div *ngIf="status">
