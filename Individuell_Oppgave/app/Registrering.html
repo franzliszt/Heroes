@@ -36,7 +36,7 @@
                 <div class="hoyre-label">700 000 kr</div>
                 <div>
                     <input type="range" min="10000" max="700000" [(ngModel)]="belop" 
-                           (ngModel)="avdrag" step="5000" (mousedown)="kalkulerAvdrag()" (mouseup)="kalkulerAvdrag()" />
+                           (ngModel)="avdrag" step="5000"  (input)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id="boksinput" value="{{ belop }}" />
@@ -49,7 +49,7 @@
                 <div class="hoyre-label">20 år</div>
                 <div>
                     <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" 
-                           (mousedown)="kalkulerAvdrag()" (mouseup)="kalkulerAvdrag()" />
+                          (input)="kalkulerAvdrag()"  />
                 </div>
                 <div>
                     <input id=boksinput value="{{ tid }}" />

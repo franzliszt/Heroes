@@ -12,7 +12,6 @@ var core_1 = require("@angular/core");
 var forms_1 = require("@angular/forms");
 require("rxjs/add/operator/map");
 var soknad_1 = require("./soknad");
-var kalkulator_1 = require("./kalkulator");
 var skjemaservice_1 = require("./skjemaservice");
 var SkjemaKontroll = (function () {
     function SkjemaKontroll(fb, service) {
@@ -71,14 +70,6 @@ var SkjemaKontroll = (function () {
         this.visSkjema = false;
         this.skjemaStatus = "endre";
         this.finnMinSoknad = true;
-    };
-    // virker ikke -- kalkulator må fikses
-    SkjemaKontroll.prototype.beregn = function () {
-        // hent data og sjekk om de er gyldige feks ikke 00
-        var k = new kalkulator_1.Kalkulator();
-        var belop = this.skjema.value.belop;
-        var tid = this.skjema.value.netbetalingstid;
-        this.skjema.patchValue({ avdrag: k.beregn(belop, tid) });
     };
     // viser søknadsskjema
     SkjemaKontroll.prototype.tilSkjema = function () {

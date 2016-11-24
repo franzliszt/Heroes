@@ -94,15 +94,6 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         this.finnMinSoknad = true;
     }
 
-    // virker ikke -- kalkulator må fikses
-    beregn() {
-        // hent data og sjekk om de er gyldige feks ikke 00
-        let k = new Kalkulator();
-        let belop = this.skjema.value.belop;
-        let tid = this.skjema.value.netbetalingstid;
-        this.skjema.patchValue({ avdrag: k.beregn(belop, tid) });
-    }
-
     // viser søknadsskjema
     tilSkjema() {
         this.finnMinSoknad = false;
