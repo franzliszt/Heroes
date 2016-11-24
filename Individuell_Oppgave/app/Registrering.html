@@ -1,4 +1,4 @@
-﻿<div *ngIf="!velkommen && !status">
+﻿<div *ngIf="!velkommen && !status && !okBoks">
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -36,7 +36,7 @@
                 <div class="hoyre-label">700 000 kr</div>
                 <div>
                     <input type="range" min="10000" max="700000" [(ngModel)]="belop" 
-                           (ngModel)="avdrag" step="5000" (mousedown)="ut()" (mouseup)="ut()" />
+                           (ngModel)="avdrag" step="5000" (mousedown)="kalkulerAvdrag()" (mouseup)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id="boksinput" value="{{ belop }}" />
@@ -48,7 +48,8 @@
                 <div class="venstre-label">3 år</div>
                 <div class="hoyre-label">20 år</div>
                 <div>
-                    <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" (mousedown)="ut()" (mouseup)="ut()" />
+                    <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" 
+                           (mousedown)="kalkulerAvdrag()" (mouseup)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id=boksinput value="{{ tid }}" />

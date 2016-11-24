@@ -56,7 +56,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
 
     ngOnInit(): void {
         this.nullstill();
-        this.ut();
+        this.kalkulerAvdrag();
         //this.skjema.valid = false;
         this.laster = true;
         this.skjemaStatus = "registrer";
@@ -111,7 +111,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
     }
 
     // kalkulerer avdrag pr mnd
-    ut(): void {
+    kalkulerAvdrag(): void {
         let y = (0.07 * this.belop) /
             (1 - Math.pow((1 + 0.079), -this.tid));
         this.avdrag = (parseFloat((y / 12).toFixed(2)));

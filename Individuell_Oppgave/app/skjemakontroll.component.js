@@ -37,7 +37,7 @@ var SkjemaKontroll = (function () {
     };
     SkjemaKontroll.prototype.ngOnInit = function () {
         this.nullstill();
-        this.ut();
+        this.kalkulerAvdrag();
         //this.skjema.valid = false;
         this.laster = true;
         this.skjemaStatus = "registrer";
@@ -87,7 +87,7 @@ var SkjemaKontroll = (function () {
         this.visKalkulator = false;
     };
     // kalkulerer avdrag pr mnd
-    SkjemaKontroll.prototype.ut = function () {
+    SkjemaKontroll.prototype.kalkulerAvdrag = function () {
         var y = (0.07 * this.belop) /
             (1 - Math.pow((1 + 0.079), -this.tid));
         this.avdrag = (parseFloat((y / 12).toFixed(2)));
