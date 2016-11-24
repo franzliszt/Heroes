@@ -19,7 +19,7 @@
             <h1>Velkommen til Angular2 gjeldsbrev</h1>
         </div>
         <div class="center-block">
-            <button class="btn regbutton" (click)="tilbake()">Gå til lånekalkulator</button>
+            <button class="btn regknapp" (click)="tilbake()">Gå til lånekalkulator</button>
         </div>
     </div>
 
@@ -105,19 +105,19 @@
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
                     <button *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid"
-                            class="btn btn-default regbutton" (click)="lagreSoknad()" title="Registrer søknad">
+                            class="btn btn-default regknapp" (click)="lagreSoknad()" title="Registrer søknad">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                     <button *ngIf="skjemaStatus=='endre'" title="Bekreft endring" [disabled]="!skjema.valid"
-                            class="btn btn-primary regbutton" (click)="endreMinSoknad()">
+                            class="btn btn-primary regknapp" (click)="endreMinSoknad()">
                         <span class="glyphicon glyphicon-edit"> Endre</span>
                     </button>
                     <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
-                            (click)="slettSoknad(id.value)" class="btn btn-default regbutton" title="Slett søknad">
+                            (click)="slettSoknad(id.value)" class="btn btn-default regknapp" title="Slett søknad">
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>
                     <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
-                            (click)="avbryt()" class="btn btn-default regbutton" title="Avbryt">
+                            (click)="avbryt()" class="btn btn-default regknapp" title="Avbryt">
                         <span class="glyphicon glyphicon-remove">Avbryt</span>
                     </button>
                 </div>
@@ -149,7 +149,7 @@
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid" 
-                            class="btn btn-default regbutton" (click)="hentMinSoknad(data.value)">Hent min søknad</button>
+                            class="btn btn-default regknapp" (click)="hentMinSoknad(data.value)">Hent min søknad</button>
                 </div>
             </div>
         </form>
@@ -161,7 +161,7 @@
         <div class="jumbotron feilbox">
             <div>
                 <h2 id="feilmelding">Opps. {{melding}}</h2>
-                <button class="btn regbutton" (click)="tilbake()">Ok</button>
+                <button class="btn regknapp" (click)="tilbake()">Ok</button>
             </div>
         </div>
     </div>
@@ -170,7 +170,7 @@
         <div class="jumbotron okbox">
             <div>
                 <h2 id="melding">{{melding}}</h2>
-                <button class="btn regbutton" (click)="tilbake()">Ok</button>
+                <button class="btn regknapp" (click)="tilbake()">Ok</button>
             </div>
         </div>
     </div>
