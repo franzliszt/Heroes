@@ -38,7 +38,6 @@ var SkjemaService = (function () {
             .map(function (returData) { return returData.toString(); });
     };
     // Henter en søknad -- fungerer
-    // må håndtere feilmeldinger og annen retur
     SkjemaService.prototype.hentSoknad = function (id) {
         return this._http.get("api/Bruker/" + id)
             .map(function (returdata) { return returdata.json(); })

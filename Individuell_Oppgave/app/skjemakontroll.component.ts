@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, OnChanges, Input, SimpleChanges} from "@angular/core";
+﻿import { Component, OnInit, Input} from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
 import "rxjs/add/operator/map";
 import { Soknad } from "./soknad";
@@ -11,14 +11,14 @@ import { SkjemaService } from "./skjemaservice";
     providers: [SkjemaService],
 })
 
-export class SkjemaKontroll implements OnInit, OnChanges {
-// startverdier på slider
+export class SkjemaKontroll implements OnInit {
+    // startverdier på slider
     belop: number = 150000;
     tid: number = 5;
     // variabel som brukes til å vise månedlige avdrag
     avdrag: number;
 
-    // flagg 
+    // Flagg for å bestemme visninger i html.
     visSkjema: boolean;
     visKalkulator: boolean;
     visning: boolean;
@@ -26,15 +26,15 @@ export class SkjemaKontroll implements OnInit, OnChanges {
     skjemaStatus: string;
     finnMinSoknad: boolean;
     status: boolean;
-    velkommen: boolean; // ta bort?
+    //velkommen: boolean; // ta bort?
     okBoks: boolean;
-
 
     // for tilbakemeldinger
     melding: string;
 
     skjema: FormGroup;
 
+    // private service er den som brukes ved kall som går mot api/Bruker.
     constructor(private fb: FormBuilder, private service: SkjemaService) {
         this.skjema = fb.group({
             id: ["", Validators.pattern("[0-9]{1,10}")],
@@ -48,12 +48,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         });
     }
 
-    @Input() // ikke ferdig
-    prop: number;
-    ngOnChanges(changes: SimpleChanges) {
-        alert(changes[this.belop]);
-    }
-
+    // Initialiserer nødvendighet.
     ngOnInit(): void {
         this.nullstill();
         this.kalkulerAvdrag();
@@ -61,8 +56,8 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
-        this.velkommen = true;
-        this.visKalkulator = false;
+        //this.velkommen = true;
+        this.visKalkulator = true;
     }
 
     vedSubmit(): void {
@@ -74,7 +69,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         } 
     }
 
-    // ferdig
+    // Nullstiller skjemaet.
     nullstill(): void {
         this.skjema.patchValue({ id: "" });
         this.skjema.patchValue({ personnummer: "" });
@@ -83,6 +78,13 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         this.skjema.patchValue({ belop: "" });
         this.skjema.patchValue({ nedbetalingstid: "" });
         this.skjema.patchValue({ avdrag: "" });
+        this.settStartverdier();
+    }
+
+    // Startverdier på slidere.
+    private settStartverdier(): void {
+        this.belop = 150000;
+        this.tid = 5;
     }
 
     // ikke ferdig
@@ -94,7 +96,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         this.finnMinSoknad = true;
     }
 
-    // viser søknadsskjema
+    // Viser søknadsskjemaet.
     tilSkjema() {
         this.finnMinSoknad = false;
         this.visSkjema = true;
@@ -130,7 +132,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
     }
     
 
-    // Hjelpemetode for å hente data fra skjemaet.
+    // Hjelpemetode for å hente data fra skjemaet og oppretter en søknad.
     private opprettSoknad(): Soknad {
         let soknad = new Soknad();
         soknad.personnummer = this.skjema.value.personnummer;
@@ -142,7 +144,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         return soknad;
     }
 
-    // virker 
+    // Henter en spesifikk søknad ved bruk av søknadsnummer. 
     hentMinSoknad(id): void {
         if (id == "") {
             return;
@@ -201,9 +203,9 @@ export class SkjemaKontroll implements OnInit, OnChanges {
     }
 
 
-    // til kalkulator
+    // Sender til lånekalkulatoren.
     tilbake(): void {
-        this.velkommen = false;
+        //this.velkommen = false;
         this.visKalkulator = true;
         this.finnMinSoknad = false;
         this.status = false;
@@ -211,7 +213,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         this.okBoks = false;
     }
 
-    // håndtering av feil-retur
+    // Viser en meldingsboks med informasjon når en operasjon går ikke bra.
     statusmelding(inputFeil: string): void {
         this.finnMinSoknad = false;
         this.visSkjema = false;
@@ -220,6 +222,7 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         this.melding = inputFeil;
     }
 
+    // Viser en meldingsboks med informasjon når en operasjon går bra.
     ok(okMelding: string): void {
         this.finnMinSoknad = false;
         this.visSkjema = false;
@@ -229,6 +232,8 @@ export class SkjemaKontroll implements OnInit, OnChanges {
         this.nullstill();
     }
 
+    // Avbryte endringer av en hentet søknad og nullstiller skjema.
+    // Returnerer til lånekalkulatoren.
     avbryt() {
         this.skjemaStatus = "registrer";
         this.nullstill();

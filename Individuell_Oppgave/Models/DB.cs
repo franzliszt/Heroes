@@ -59,7 +59,6 @@ namespace Individuell_Oppgave.Models {
             using (var db = new DatabaseContext()) {
                 SoknadDB finnSoknad = db.Soknader.FirstOrDefault(s => s.SoknadsID == nySoknad.id);
                 if (finnSoknad != null) {
-                    // endrer soknad
                     try {
                         finnSoknad.Mobiltelefon = nySoknad.mobiltelefon;
                         finnSoknad.Nedbetalingstid = nySoknad.nedbetalingstid;
@@ -70,6 +69,7 @@ namespace Individuell_Oppgave.Models {
                         db.SaveChanges();
                         return true;
                     } catch(Exception e) {
+                        // Logge til en fil
                         return false;
                     }
                 }
@@ -83,7 +83,6 @@ namespace Individuell_Oppgave.Models {
                 SoknadDB sjekkSoknad = db.Soknader.FirstOrDefault(s => s.SoknadsID == id);
                 if (sjekkSoknad == null) { return false; }
 
-                // fant søknadet
                 try {
                     db.Soknader.Remove(sjekkSoknad);
                     db.SaveChanges();
@@ -94,7 +93,7 @@ namespace Individuell_Oppgave.Models {
             }
         }
 
-        // henter alle lagrede søknader
+        // henter alle lagrede søknader -- ikke i bruk
         public List<Soknad> hentAlleSoknader() {
             using (var db = new DatabaseContext()) {
 

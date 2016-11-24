@@ -11,18 +11,18 @@ using System.Collections.Generic;
 namespace Individuell_Oppgave.Controllers {
     public class BrukerController : ApiController {
         //public HttpResponseMessage Get() {
-        //    List<Soknad> resultat = new DB().hentAlleSoknader();
+        //    List<Soknad> mineSoknader = new DB().hentAlleSoknader();
 
-        //    var Json = new JavaScriptSerializer();
-        //    string JsonString = Json.Serialize(resultat);
+        //    var json = new JavaScriptSerializer();
+        //    string jsonString = json.Serialize(mineSoknader);
 
         //    return new HttpResponseMessage() {
-        //        Content = new StringContent(JsonString, Encoding.UTF8, "application/json"),
+        //        Content = new StringContent(jsonString, Encoding.UTF8, "application/json"),
         //        StatusCode = HttpStatusCode.OK
         //    };
         //}
 
-        // henter en søknad
+        
         [HttpGet]
         public HttpResponseMessage Get(int id) {
             Soknad resultat = new DB().hentMinSoknad(id);
@@ -66,7 +66,7 @@ namespace Individuell_Oppgave.Controllers {
         [HttpPost]
         public HttpResponseMessage Post([FromBody]Soknad nySoknad) {
             if (ModelState.IsValid) {
-                
+                // Returnerer søknaden for å gi søknadsnummeret til brukeren etter at den er lagret.
                 Soknad soknadsNr = new DB().lagre(nySoknad);
                 if (soknadsNr != null) {
                     var j = new JavaScriptSerializer();
@@ -83,9 +83,7 @@ namespace Individuell_Oppgave.Controllers {
         }
 
         [HttpPut]
-        // endre en søknad -- virker
         public HttpResponseMessage Put([FromBody] Soknad s) {
-            Debug.WriteLine("XXXXXXXXXXXXXXXXXXXXXX HER I PUT");
             if (ModelState.IsValid) {
                 bool endret = new DB().endreSoknad(s);
                 if (endret) {
@@ -100,10 +98,9 @@ namespace Individuell_Oppgave.Controllers {
             };
         }
 
-        // sletter en søknad
+        
         [HttpDelete]
         public HttpResponseMessage Delete(int id) {
-            Debug.WriteLine("XXXXXXXXXXXXXXXXXXXXXX HER I DELETE");
             if (!new DB().slettSoknad(id)) {
                 return new HttpResponseMessage() {
                     StatusCode = HttpStatusCode.NotFound,

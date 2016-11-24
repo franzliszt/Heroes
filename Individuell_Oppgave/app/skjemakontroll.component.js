@@ -14,6 +14,7 @@ require("rxjs/add/operator/map");
 var soknad_1 = require("./soknad");
 var skjemaservice_1 = require("./skjemaservice");
 var SkjemaKontroll = (function () {
+    // private service er den som brukes ved kall som går mot api/Bruker.
     function SkjemaKontroll(fb, service) {
         this.fb = fb;
         this.service = service;
@@ -31,9 +32,7 @@ var SkjemaKontroll = (function () {
             avdrag: [""]
         });
     }
-    SkjemaKontroll.prototype.ngOnChanges = function (changes) {
-        alert(changes[this.belop]);
-    };
+    // Initialiserer nødvendighet.
     SkjemaKontroll.prototype.ngOnInit = function () {
         this.nullstill();
         this.kalkulerAvdrag();
@@ -41,8 +40,8 @@ var SkjemaKontroll = (function () {
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
-        this.velkommen = true;
-        this.visKalkulator = false;
+        //this.velkommen = true;
+        this.visKalkulator = true;
     };
     SkjemaKontroll.prototype.vedSubmit = function () {
         if (this.skjemaStatus == "registrer") {
@@ -53,7 +52,7 @@ var SkjemaKontroll = (function () {
                 + "Vennligst prøv igjen senere.");
         }
     };
-    // ferdig
+    // Nullstiller skjemaet.
     SkjemaKontroll.prototype.nullstill = function () {
         this.skjema.patchValue({ id: "" });
         this.skjema.patchValue({ personnummer: "" });
@@ -62,6 +61,12 @@ var SkjemaKontroll = (function () {
         this.skjema.patchValue({ belop: "" });
         this.skjema.patchValue({ nedbetalingstid: "" });
         this.skjema.patchValue({ avdrag: "" });
+        this.settStartverdier();
+    };
+    // Startverdier på slidere.
+    SkjemaKontroll.prototype.settStartverdier = function () {
+        this.belop = 150000;
+        this.tid = 5;
     };
     // ikke ferdig
     SkjemaKontroll.prototype.visMinLaneSoknad = function () {
@@ -71,7 +76,7 @@ var SkjemaKontroll = (function () {
         this.skjemaStatus = "endre";
         this.finnMinSoknad = true;
     };
-    // viser søknadsskjema
+    // Viser søknadsskjemaet.
     SkjemaKontroll.prototype.tilSkjema = function () {
         this.finnMinSoknad = false;
         this.visSkjema = true;
@@ -101,7 +106,7 @@ var SkjemaKontroll = (function () {
         });
         this.laster = false;
     };
-    // Hjelpemetode for å hente data fra skjemaet.
+    // Hjelpemetode for å hente data fra skjemaet og oppretter en søknad.
     SkjemaKontroll.prototype.opprettSoknad = function () {
         var soknad = new soknad_1.Soknad();
         soknad.personnummer = this.skjema.value.personnummer;
@@ -112,7 +117,7 @@ var SkjemaKontroll = (function () {
         soknad.avdragPrMnd = this.avdrag;
         return soknad;
     };
-    // virker 
+    // Henter en spesifikk søknad ved bruk av søknadsnummer. 
     SkjemaKontroll.prototype.hentMinSoknad = function (id) {
         var _this = this;
         if (id == "") {
@@ -165,16 +170,16 @@ var SkjemaKontroll = (function () {
             _this.statusmelding("Klarte ikke å slette søknad med søknadsnummer " + id);
         });
     };
-    // til kalkulator
+    // Sender til lånekalkulatoren.
     SkjemaKontroll.prototype.tilbake = function () {
-        this.velkommen = false;
+        //this.velkommen = false;
         this.visKalkulator = true;
         this.finnMinSoknad = false;
         this.status = false;
         this.visSkjema = false;
         this.okBoks = false;
     };
-    // håndtering av feil-retur
+    // Viser en meldingsboks med informasjon når en operasjon går ikke bra.
     SkjemaKontroll.prototype.statusmelding = function (inputFeil) {
         this.finnMinSoknad = false;
         this.visSkjema = false;
@@ -182,6 +187,7 @@ var SkjemaKontroll = (function () {
         this.status = true;
         this.melding = inputFeil;
     };
+    // Viser en meldingsboks med informasjon når en operasjon går bra.
     SkjemaKontroll.prototype.ok = function (okMelding) {
         this.finnMinSoknad = false;
         this.visSkjema = false;
@@ -190,16 +196,14 @@ var SkjemaKontroll = (function () {
         this.melding = okMelding;
         this.nullstill();
     };
+    // Avbryte endringer av en hentet søknad og nullstiller skjema.
+    // Returnerer til lånekalkulatoren.
     SkjemaKontroll.prototype.avbryt = function () {
         this.skjemaStatus = "registrer";
         this.nullstill();
         this.visSkjema = false;
         this.visKalkulator = true;
     };
-    __decorate([
-        core_1.Input(), 
-        __metadata('design:type', Number)
-    ], SkjemaKontroll.prototype, "prop", void 0);
     SkjemaKontroll = __decorate([
         core_1.Component({
             selector: "registrering",

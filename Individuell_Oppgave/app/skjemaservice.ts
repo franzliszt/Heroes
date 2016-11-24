@@ -37,7 +37,6 @@ export class SkjemaService {
    }
 
    // Henter en søknad -- fungerer
-   // må håndtere feilmeldinger og annen retur
    hentSoknad(id): any {
        return this._http.get("api/Bruker/" + id)
            .map((returdata: Response) => returdata.json())
