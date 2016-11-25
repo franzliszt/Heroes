@@ -63,7 +63,6 @@ export class SkjemaKontroll implements OnInit {
     }
 
     private oppdaterSoknadsliste(soknader: any) {
-        alert("Oppdaterer søknader");
         this.alleSoknader = [];
         for (let soknad of soknader) {
             this.alleSoknader.push(soknad);
@@ -140,7 +139,6 @@ export class SkjemaKontroll implements OnInit {
 
     // lagrer en søknad og virket -- ikke ferdig
     lagreSoknad(): void {
-        alert("Inn");
         this.laster = true;
         let soknad = this.opprettSoknad();
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
@@ -150,7 +148,7 @@ export class SkjemaKontroll implements OnInit {
         }
         this.service.lagreSoknad(soknad).subscribe(
             retur => this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" + 
-                        "Vennligst husk dette for fremtidig endring/visning av søknaden."),
+                        "Bruk ditt personnummer for å hente din søknadshistorikk."),
             error => {
                 this.statusmelding("Klarte ikke å lagre.");
             });
@@ -195,10 +193,8 @@ export class SkjemaKontroll implements OnInit {
         this.service.endreSoknad(soknad)
             .subscribe(
             retur => {
-                this.ok("Søknad med søknadsnummer " + soknad.id + " er endret.");
+                //this.ok("Søknad med søknadsnummer " + soknad.id + " er endret.");
                 this.hentMineSoknader(soknad.personnummer);
-                //this.skjemaStatus = "registrer";
-                //this.nullstill();
             },
             error => {
                 this.statusmelding("Endring av søknad mislyktes.");
@@ -264,7 +260,6 @@ export class SkjemaKontroll implements OnInit {
     }
 
     tilOversikt() {
-        alert("Hei");
         this.visSkjema = false;
         this.visKalkulator = false;
         this.visListe = true;

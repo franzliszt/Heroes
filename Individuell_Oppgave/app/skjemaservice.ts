@@ -20,14 +20,12 @@ export class SkjemaService {
    }
 
    hentMineSoknader(id: string): any {
-       alert("inne i hent alle");
        return this._http.get("api/Bruker/" + id)
            .map((returdata: Response) => returdata.json() )
    }
 
    // Lagrer en søknad. -- (fortsetter å feile)
    lagreSoknad(soknad: Soknad): any {
-       alert("LAgreservice");
        let body: string = JSON.stringify(soknad);
 
        return this._http.post("api/Bruker", body, this.options)

@@ -112,13 +112,8 @@
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                     <button *ngIf="skjemaStatus=='endre'" title="Bekreft endring" [disabled]="!skjema.valid"
-                            class="btn btn-primary regknapp" (click)="endreMinSoknad()">
-                        <span class="glyphicon glyphicon-edit"> Endre</span>
+                            class="btn btn-primary regknapp" (click)="endreMinSoknad()">Bekreft endring
                     </button>
-                    <!--<button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
-                            (click)="slettSoknad(id.value)" class="btn btn-default regknapp" title="Slett søknad">
-                        <span class="glyphicon glyphicon-trash"></span>
-                    </button>-->
                     <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
                             (click)="tilOversikt()" class="btn btn-default regknapp" title="Til oversikt">
                         Til min oversikt
@@ -179,7 +174,7 @@
     </div>
 
     <div *ngIf="visListe && !okBoks">
-        <table>
+        <table class="table minTabell">
             <tr>
                 <th>Søknadsnummer</th>
                 <th>Lånebeløp</th>
@@ -188,6 +183,7 @@
                 <th>Epost</th>
                 <th>Mobiltelefon</th>
                 <th>Personnummer</th>
+                <th></th>
             </tr>
             <tbody *ngFor="let soknad of alleSoknader">
                 <tr>
@@ -198,12 +194,16 @@
                     <td>{{soknad.epost}}</td>
                     <td>{{soknad.mobiltelefon}}</td>
                     <td>{{soknad.personnummer}}</td>
-                    <td><button class="btn regknapp" (click)="hentMinSoknad(soknad)">Endre denne</button></td>
-                    <td><button class="btn regknapp" (click)="slettSoknad(soknad.id)">Slett denne</button></td>
+                    <td>
+                        <button class="btn endreknapp" (click)="hentMinSoknad(soknad)">
+                            <span class="glyphicon glyphicon-edit"></span>
+                        </button>
+                        <button class="btn slettknapp" (click)="slettSoknad(soknad.id)">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         </table>
     </div>
-
-
 </div>

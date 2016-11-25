@@ -28,9 +28,36 @@ body, html{
     color: white;
     background-color:#aa422f;
 }
-.regbutton:active{    
-    color: white;
-    background-color:#aa422f;
+
+
+.endreknapp {
+    height: 50px;
+    width: 50px;
+    background-color: #555555;
+    color:#eaeaea;
+    margin: 0 8px 10px 8px;
+}
+
+.endreknapp:hover {
+    background-color: #eaeaea;
+    color: #555555;
+}
+
+.slettknapp {
+    height: 50px;
+    width: 50px;
+    background-color: #222222;
+    color: #eaeaea;
+    margin: 0 8px 10px 8px;
+}
+
+.slettknapp:hover {
+    background-color: tomato;
+    color: #222222;
+}
+
+.minTabell {
+    color: #eaeaea;
 }
 
 .calcbutton{    

@@ -42,7 +42,6 @@ var SkjemaKontroll = (function () {
         }, function (error) { return _this.statusmelding("Klarte ikke hente din informasjon."); });
     };
     SkjemaKontroll.prototype.oppdaterSoknadsliste = function (soknader) {
-        alert("Oppdaterer søknader");
         this.alleSoknader = [];
         for (var _i = 0, soknader_1 = soknader; _i < soknader_1.length; _i++) {
             var soknad = soknader_1[_i];
@@ -113,7 +112,6 @@ var SkjemaKontroll = (function () {
     // lagrer en søknad og virket -- ikke ferdig
     SkjemaKontroll.prototype.lagreSoknad = function () {
         var _this = this;
-        alert("Inn");
         this.laster = true;
         var soknad = this.opprettSoknad();
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
@@ -122,7 +120,7 @@ var SkjemaKontroll = (function () {
             return;
         }
         this.service.lagreSoknad(soknad).subscribe(function (retur) { return _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-            "Vennligst husk dette for fremtidig endring/visning av søknaden."); }, function (error) {
+            "Bruk ditt personnummer for å hente din søknadshistorikk."); }, function (error) {
             _this.statusmelding("Klarte ikke å lagre.");
         });
         this.laster = false;
@@ -160,10 +158,8 @@ var SkjemaKontroll = (function () {
         soknad.id = this.skjema.value.id;
         this.service.endreSoknad(soknad)
             .subscribe(function (retur) {
-            _this.ok("Søknad med søknadsnummer " + soknad.id + " er endret.");
+            //this.ok("Søknad med søknadsnummer " + soknad.id + " er endret.");
             _this.hentMineSoknader(soknad.personnummer);
-            //this.skjemaStatus = "registrer";
-            //this.nullstill();
         }, function (error) {
             _this.statusmelding("Endring av søknad mislyktes.");
         });
@@ -221,7 +217,6 @@ var SkjemaKontroll = (function () {
         this.visKalkulator = true;
     };
     SkjemaKontroll.prototype.tilOversikt = function () {
-        alert("Hei");
         this.visSkjema = false;
         this.visKalkulator = false;
         this.visListe = true;
