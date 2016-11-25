@@ -24,13 +24,11 @@ var SkjemaService = (function () {
         return Promise.reject(error.message || error);
     };
     SkjemaService.prototype.hentMineSoknader = function (id) {
-        alert("inne i hent alle");
         return this._http.get("api/Bruker/" + id)
             .map(function (returdata) { return returdata.json(); });
     };
     // Lagrer en søknad. -- (fortsetter å feile)
     SkjemaService.prototype.lagreSoknad = function (soknad) {
-        alert("LAgreservice");
         var body = JSON.stringify(soknad);
         return this._http.post("api/Bruker", body, this.options)
             .map(function (returData) { return returData.json(); })

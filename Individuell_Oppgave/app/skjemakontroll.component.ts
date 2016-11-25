@@ -26,7 +26,6 @@ export class SkjemaKontroll implements OnInit {
     skjemaStatus: string;
     finnMinSoknad: boolean;
     status: boolean;
-    //velkommen: boolean; // ta bort?
     okBoks: boolean;
     visListe: boolean;
 
@@ -35,6 +34,7 @@ export class SkjemaKontroll implements OnInit {
 
     skjema: FormGroup;
     alleSoknader: Array<Soknad>;
+    kalkulator: Kalkulator;
 
     // private service er den som brukes ved kall som går mot api/Bruker.
     constructor(private fb: FormBuilder, private service: SkjemaService) {
@@ -50,36 +50,16 @@ export class SkjemaKontroll implements OnInit {
         });
     }
 
-    hentMineSoknader(pnr: string): void {
-        this.service.hentMineSoknader(pnr).subscribe(soknader => {
-            if (soknader) {
-                this.oppdaterSoknadsliste(soknader);
-                this.visSkjema = false;
-                this.finnMinSoknad = false;
-                this.visListe = true;
-            };
-        },
-        error => this.statusmelding("Klarte ikke hente din informasjon."));
-    }
-
-    private oppdaterSoknadsliste(soknader: any) {
-        this.alleSoknader = [];
-        for (let soknad of soknader) {
-            this.alleSoknader.push(soknad);
-            this.laster = false;
-        }
-    }
-
     // Initialiserer nødvendighet.
     ngOnInit(): void {
+        this.kalkulator = new Kalkulator();
         this.belop = 150000;
         this.tid = 5;
-        this.nullstill();
         this.kalkulerAvdrag();
+        this.nullstill();
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
-        //this.velkommen = true;
         this.visKalkulator = true;
     }
 
@@ -128,11 +108,12 @@ export class SkjemaKontroll implements OnInit {
         this.visKalkulator = false;
     }
 
-    // kalkulerer avdrag pr mnd
+    // Kalkulerer avdrag pr mnd.
     kalkulerAvdrag(): void {
-        let y = (0.07 * this.belop) /
-            (1 - Math.pow((1 + 0.079), -this.tid));
-        this.avdrag = (parseFloat((y / 12).toFixed(2)));
+        this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
+        //let y = (0.07 * this.belop) /
+        //    (1 - Math.pow((1 + 0.079), -this.tid));
+        //this.avdrag = (parseFloat((y / 12).toFixed(2)));
     }
 
     /* *****Metoder som kaller på tjenesten mot api***** */
@@ -168,7 +149,7 @@ export class SkjemaKontroll implements OnInit {
         return soknad;
     }
 
-    // Henter en spesifikk søknad ved bruk av søknadsnummer. 
+    // Henter en spesifikk søknad som skal endres. 
     hentMinSoknad(soknad: Soknad): void {
         this.skjema.patchValue({ id: soknad.id });
         this.skjema.patchValue({ personnummer: soknad.personnummer });
@@ -183,17 +164,38 @@ export class SkjemaKontroll implements OnInit {
         this.skjemaStatus = "endre";
         this.visListe = false;
         this.visSkjema = true;
-            
     }
 
-    // Endrer søknad
+    // Henter alle søknader tilhørende en bruker.
+    hentMineSoknader(pnr: string): void {
+        this.service.hentMineSoknader(pnr).subscribe(soknader => {
+            if (soknader) {
+                this.oppdaterSoknadsliste(soknader);
+                this.skjemaStatus = "endre";
+                this.visSkjema = false;
+                this.finnMinSoknad = false;
+                this.visListe = true;
+            };
+        },
+            error => this.statusmelding("Klarte ikke hente din informasjon."));
+    }
+
+    // Oppdaterer et array av søknader.
+    private oppdaterSoknadsliste(soknader: any): void {
+        this.alleSoknader = [];
+        for (let soknad of soknader) {
+            this.alleSoknader.push(soknad);
+            this.laster = false;
+        }
+    }
+
+    // Endrer søknad og gjør et kall for å hente oppdatert søknadsliste for en bruker.
     endreMinSoknad(): void {
         let soknad = this.opprettSoknad();
         soknad.id = this.skjema.value.id;
         this.service.endreSoknad(soknad)
             .subscribe(
             retur => {
-                //this.ok("Søknad med søknadsnummer " + soknad.id + " er endret.");
                 this.hentMineSoknader(soknad.personnummer);
             },
             error => {
@@ -201,7 +203,7 @@ export class SkjemaKontroll implements OnInit {
             });
     }
 
-    // Fungerer.
+    // Sletter en søknad og oppdaterer visningen av søkerens søknader.
     slettSoknad(id): void {
         this.service.slettSoknad(id)
             .subscribe(
@@ -248,10 +250,8 @@ export class SkjemaKontroll implements OnInit {
         this.nullstill();
     }
 
-    // Avbryte endringer av en hentet søknad og nullstiller skjema.
-    // Returnerer til lånekalkulatoren.
-    avbryt() {
-        
+    // Avslutter visning av alle søknader og endringsfunksjonalitet og returnerer til lånekalkulatoren.
+    avbryt(): void {
         this.skjemaStatus = "registrer";
         this.nullstill(); // må endres
         this.visSkjema = false;
@@ -259,7 +259,8 @@ export class SkjemaKontroll implements OnInit {
         this.visKalkulator = true;
     }
 
-    tilOversikt() {
+    // Går til oversikten over alle søknader registrert på en kunde.
+    tilOversikt(): void{
         this.visSkjema = false;
         this.visKalkulator = false;
         this.visListe = true;

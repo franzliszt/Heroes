@@ -7,8 +7,8 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Hjem</a></li>
                 <li>
-                    <a *ngIf="!visListe && skjemaStatus != 'endre'"href="#" (click)="visMinLaneSoknad()">Hent mine lånesøknader</a>
-                    <a *ngIf="visListe || (visSkjema && skjemaStatus == 'endre')" href="#" (click)="avbryt()">Avslutt</a>
+                    <a *ngIf="skjemaStatus != 'endre'"href="#" (click)="visMinLaneSoknad()">Hent mine lånesøknader</a>
+                    <a *ngIf="skjemaStatus == 'endre'" href="#" (click)="avbryt()">Avslutt</a>
                 </li>
             </ul>
         </div>
@@ -16,15 +16,6 @@
 </div>
 
 <div class="container-fluid">
-    <!--VELKOMSTVINDU-->
-    <!--<div class="jumbotron velkomst" *ngIf="velkommen">
-        <div class="text-justify">
-            <h1>Velkommen til Angular2 gjeldsbrev</h1>
-        </div>
-        <div class="center-block">
-            <button class="btn regknapp" (click)="tilbake()">Gå til lånekalkulator</button>
-        </div>
-    </div>-->
 
 
     <!--KALKULATOR-->
@@ -65,7 +56,8 @@
                 <p><small>* Effektiv rente 7%. <br />Ved å trykke "søk nå" godtar du mine vilkår.</small></p>
             </div>
         </div>
-        <button class="btn btn-default logbutton" (click)="tilSkjema()">Søk nå</button>
+        <button *ngIf="skjemaStatus == 'registrer'" class="btn btn-default logbutton" (click)="tilSkjema()">Søk nå</button>
+        <button *ngIf="skjemaStatus == 'endre'" class="btn btn-default logbutton" (click)="tilSkjema()">Til endring</button>
     </div>
 
 
