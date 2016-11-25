@@ -25,7 +25,8 @@ var SkjemaService = (function () {
     };
     SkjemaService.prototype.hentMineSoknader = function (id) {
         return this._http.get("api/Bruker/" + id)
-            .map(function (returdata) { return returdata.json(); });
+            .map(function (returdata) { return returdata.json(); })
+            .catch(function (error) { return Observable_1.Observable.throw(error.json().error || "Feil med server."); });
     };
     // Lagrer en søknad. -- (fortsetter å feile)
     SkjemaService.prototype.lagreSoknad = function (soknad) {

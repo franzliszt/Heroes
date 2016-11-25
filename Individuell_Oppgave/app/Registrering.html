@@ -128,12 +128,14 @@
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-lg-4">
                     <label for="belop">Tast inn personnummeret</label>
+                    
                     <input class="form-control" name="personnummer" #data
                            formControlName="personnummer" />
                     <p class="alert alert-warning"
                        [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
-                        Kun heltall. Maks 10 siffer og mimimum 1 siffer.
+                        11 siffer..
                     </p>
+                    <p *ngIf="ikkePnr" class="alert alert-warning">Du er ikke registrert</p>
                 </div>
             </div>
             <div class="row">

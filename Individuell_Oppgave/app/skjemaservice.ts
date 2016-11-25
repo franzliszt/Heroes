@@ -21,7 +21,8 @@ export class SkjemaService {
 
    hentMineSoknader(id: string): any {
        return this._http.get("api/Bruker/" + id)
-           .map((returdata: Response) => returdata.json() )
+           .map((returdata: Response) => returdata.json())
+           .catch((error: any) => Observable.throw(error.json().error || "Feil med server."));
    }
 
    // Lagrer en søknad. -- (fortsetter å feile)

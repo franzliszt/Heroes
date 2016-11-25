@@ -117,7 +117,7 @@ namespace Individuell_Oppgave.Models {
         public List<Soknad> hentMineSoknader(string pnr) {
             using (var db = new DatabaseContext()) {
 
-                var listeFraDB = db.Soknader.Where(p => p.Personnummer == pnr).ToList();
+                var listeFraDB = db.Soknader.Where(p => p.Personnummer.Equals(pnr)).ToList();
                 if (listeFraDB == null) { return null; }
 
                 List<Soknad> mineSoknader = new List<Soknad>();

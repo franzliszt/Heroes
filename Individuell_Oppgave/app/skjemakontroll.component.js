@@ -69,6 +69,7 @@ var SkjemaKontroll = (function () {
     };
     // ikke ferdig
     SkjemaKontroll.prototype.visMinLaneSoknad = function () {
+        this.melding = "";
         this.skjema.patchValue({ personnummer: "" });
         this.visKalkulator = false;
         this.visSkjema = false;
@@ -136,15 +137,22 @@ var SkjemaKontroll = (function () {
     // Henter alle søknader tilhørende en bruker.
     SkjemaKontroll.prototype.hentMineSoknader = function (pnr) {
         var _this = this;
+        if (pnr == "") {
+            this.skjema.patchValue({ personnummer: " " });
+            return;
+        }
         this.service.hentMineSoknader(pnr).subscribe(function (soknader) {
-            if (soknader) {
+            if (soknader[0] != null) {
                 _this.oppdaterSoknadsliste(soknader);
                 _this.skjemaStatus = "endre";
                 _this.visSkjema = false;
                 _this.finnMinSoknad = false;
                 _this.visListe = true;
             }
-            ;
+            else {
+                _this.ikkePnr = false;
+                _this.statusmelding("Du er ikke registrert");
+            }
         }, function (error) { return _this.statusmelding("Klarte ikke hente din informasjon."); });
     };
     // Oppdaterer et array av søknader.
@@ -190,7 +198,6 @@ var SkjemaKontroll = (function () {
         ;
         this.finnMinSoknad = false;
         this.status = false;
-        //this.visSkjema = false;
         this.okBoks = false;
     };
     // Viser en meldingsboks med informasjon når en operasjon går ikke bra.

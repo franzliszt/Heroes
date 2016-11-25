@@ -28,6 +28,7 @@ export class SkjemaKontroll implements OnInit {
     status: boolean;
     okBoks: boolean;
     visListe: boolean;
+    ikkePnr: boolean;
 
     // for tilbakemeldinger
     melding: string;
@@ -92,6 +93,7 @@ export class SkjemaKontroll implements OnInit {
 
     // ikke ferdig
     visMinLaneSoknad(): void {
+        this.melding = "";
         this.skjema.patchValue({ personnummer: "" });
         this.visKalkulator = false;
         this.visSkjema = false;
@@ -168,14 +170,21 @@ export class SkjemaKontroll implements OnInit {
 
     // Henter alle søknader tilhørende en bruker.
     hentMineSoknader(pnr: string): void {
+        if (pnr == "") {
+            this.skjema.patchValue({ personnummer: " " });
+            return;
+        }
         this.service.hentMineSoknader(pnr).subscribe(soknader => {
-            if (soknader) {
+            if (soknader[0] != null) {
                 this.oppdaterSoknadsliste(soknader);
                 this.skjemaStatus = "endre";
                 this.visSkjema = false;
                 this.finnMinSoknad = false;
                 this.visListe = true;
-            };
+            } else {
+                this.ikkePnr = false;
+                this.statusmelding("Du er ikke registrert");
+            }
         },
             error => this.statusmelding("Klarte ikke hente din informasjon."));
     }
@@ -226,7 +235,6 @@ export class SkjemaKontroll implements OnInit {
         (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;;
         this.finnMinSoknad = false;
         this.status = false;
-        //this.visSkjema = false;
         this.okBoks = false;
     }
 
