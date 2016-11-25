@@ -10,38 +10,47 @@ using System.Collections.Generic;
 
 namespace Individuell_Oppgave.Controllers {
     public class BrukerController : ApiController {
-        //public HttpResponseMessage Get() {
-        //    List<Soknad> mineSoknader = new DB().hentAlleSoknader();
-
-        //    var json = new JavaScriptSerializer();
-        //    string jsonString = json.Serialize(mineSoknader);
-
-        //    return new HttpResponseMessage() {
-        //        Content = new StringContent(jsonString, Encoding.UTF8, "application/json"),
-        //        StatusCode = HttpStatusCode.OK
-        //    };
-        //}
-
         
+        // Denne metoden henter alle søknader tilhørende en søker.
         [HttpGet]
-        public HttpResponseMessage Get(int id) {
-            Soknad resultat = new DB().hentMinSoknad(id);
-
-            if (resultat != null) {
+        public HttpResponseMessage Get(string id) {
+            List<Soknad> mineSoknader = new DB().hentMineSoknader(id);
+            if (mineSoknader != null) {
                 var json = new JavaScriptSerializer();
-                string jsonString = json.Serialize(resultat);
+                string jsonString = json.Serialize(mineSoknader);
 
                 return new HttpResponseMessage() {
-                    Content = new StringContent(jsonString, Encoding.UTF8,
-                    "application/json"), StatusCode = HttpStatusCode.OK
-                };
-            } else {
-                return new HttpResponseMessage() {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Content = new StringContent("Fant ingen søknader som samsvarte med søknadsnummeret.")
+                    Content = new StringContent(jsonString, Encoding.UTF8, "application/json"),
+                    StatusCode = HttpStatusCode.OK
                 };
             }
+            return new HttpResponseMessage() {
+                StatusCode = HttpStatusCode.BadRequest,
+                Content = new StringContent("Fant ingen søknader som samsvarte med personnummeret.")
+            };
+
         }
+
+
+        //[HttpGet]
+        //public HttpResponseMessage Get(int id) {
+        //    Soknad resultat = new DB().hentMinSoknad(id);
+
+        //    if (resultat != null) {
+        //        var json = new JavaScriptSerializer();
+        //        string jsonString = json.Serialize(resultat);
+
+        //        return new HttpResponseMessage() {
+        //            Content = new StringContent(jsonString, Encoding.UTF8,
+        //            "application/json"), StatusCode = HttpStatusCode.OK
+        //        };
+        //    } else {
+        //        return new HttpResponseMessage() {
+        //            StatusCode = HttpStatusCode.BadRequest,
+        //            Content = new StringContent("Fant ingen søknader som samsvarte med søknadsnummeret.")
+        //        };
+        //    }
+        //}
 
         // henter alle søknader til en person
         //public HttpResponseMessage Get(string pnr, int i = 0) {
@@ -101,15 +110,20 @@ namespace Individuell_Oppgave.Controllers {
         
         [HttpDelete]
         public HttpResponseMessage Delete(int id) {
-            if (!new DB().slettSoknad(id)) {
+            var soknader = new DB().slettSoknad(id);
+            if (soknader != null) {
+                soknader.ForEach(s => Debug.WriteLine("XXXXXXXXXXXXXXXXX " + s.belop));
+                // sletting utført og returnerer oppdatert liste med søknader.
+                var json = new JavaScriptSerializer();
+                var jsonstring = json.Serialize(soknader);
                 return new HttpResponseMessage() {
-                    StatusCode = HttpStatusCode.NotFound,
-                    Content = new StringContent("Klarte ikke å slette søknaden")
+                    Content = new StringContent(jsonstring, Encoding.UTF8, "application/json"), StatusCode = HttpStatusCode.OK
                 };
             }
-            // sletting utført
+            
             return new HttpResponseMessage() {
-                StatusCode = HttpStatusCode.OK
+                StatusCode = HttpStatusCode.NotFound,
+                Content = new StringContent("Klarte ikke å slette søknaden")
             };
         }
     }

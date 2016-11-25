@@ -48,9 +48,8 @@ namespace Individuell_Oppgave.Models {
                                 avdragPrMnd = s.AvdragPrMnd
                             }).First();
                     return minSoknad;
-                } else {
-                    return null;
                 }
+                return null;
             }
         }
 
@@ -78,40 +77,41 @@ namespace Individuell_Oppgave.Models {
         }
 
         // fungerer
-        public bool slettSoknad(int id) {
+        public List<Soknad> slettSoknad(int id) {
             using (var db = new DatabaseContext()) {
-                SoknadDB sjekkSoknad = db.Soknader.FirstOrDefault(s => s.SoknadsID == id);
-                if (sjekkSoknad == null) { return false; }
-
+                SoknadDB funnetSoknad = db.Soknader.FirstOrDefault(s => s.SoknadsID == id);
+                if (funnetSoknad == null) { return null; }
+                string tempPnr = funnetSoknad.Personnummer;
                 try {
-                    db.Soknader.Remove(sjekkSoknad);
+                    db.Soknader.Remove(funnetSoknad);
                     db.SaveChanges();
-                    return true;
+                    // henter oppdatert liste
+                    return hentMineSoknader(tempPnr);
                 } catch (Exception e) {
-                    return false;
+                    Console.WriteLine("En exception har oppstått: " + e.Message.ToString());
+                    return null;
                 }
             }
         }
 
         // henter alle lagrede søknader -- ikke i bruk
-        public List<Soknad> hentAlleSoknader() {
-            using (var db = new DatabaseContext()) {
+        //public List<Soknad> hentAlleSoknader(string pnr) {
+        //    using (var db = new DatabaseContext()) {
+        //        List<Soknad> soknader = 
+        //            db.Soknader.Select(s => new Soknad() {
+        //                id = s.SoknadsID,
+        //                personnummer = s.Personnummer,
+        //                mobiltelefon = s.Mobiltelefon,
+        //                epost = s.Epost,
+        //                belop = s.Belop,
+        //                nedbetalingstid = s.Nedbetalingstid,
+        //                avdragPrMnd = s.AvdragPrMnd
+        //        }).Where(p => p.personnummer == pnr).ToList();
 
-                List<Soknad> soknader = db.Soknader.Select(s => new Soknad() {
-                    id = s.SoknadsID,
-                    personnummer = s.Personnummer,
-                    mobiltelefon = s.Mobiltelefon,
-                    epost = s.Epost,
-                    belop = s.Belop,
-                    nedbetalingstid = s.Nedbetalingstid,
-                    avdragPrMnd = s.AvdragPrMnd
-                }).ToList();
-
-                if (soknader == null) { return null; }
-                
-                return soknader;
-            }
-        }
+        //        if (soknader == null) { return null; }
+        //        return soknader;
+        //    }
+        //}
 
         // henter alle søknader registrert på et personnummer
         public List<Soknad> hentMineSoknader(string pnr) {

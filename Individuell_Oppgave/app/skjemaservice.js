@@ -23,6 +23,11 @@ var SkjemaService = (function () {
     SkjemaService.prototype.feil = function (error) {
         return Promise.reject(error.message || error);
     };
+    SkjemaService.prototype.hentMineSoknader = function (id) {
+        alert("inne i hent alle");
+        return this._http.get("api/Bruker/" + id)
+            .map(function (returdata) { return returdata.json(); });
+    };
     // Lagrer en søknad. -- (fortsetter å feile)
     SkjemaService.prototype.lagreSoknad = function (soknad) {
         alert("LAgreservice");
@@ -46,7 +51,7 @@ var SkjemaService = (function () {
     // fungerer, men må skrives om
     SkjemaService.prototype.slettSoknad = function (id) {
         return this._http.delete("api/Bruker/" + id)
-            .map(function (returdata) { return returdata.toString(); });
+            .map(function (returdata) { return returdata.json(); });
     };
     SkjemaService = __decorate([
         core_1.Injectable(), 

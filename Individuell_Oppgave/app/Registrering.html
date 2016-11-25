@@ -6,7 +6,10 @@
             </div>
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Hjem</a></li>
-                <li><a href="#" (click)="visMinLaneSoknad()">Hent min lånesøknad</a></li>
+                <li>
+                    <a *ngIf="!visListe && skjemaStatus != 'endre'"href="#" (click)="visMinLaneSoknad()">Hent mine lånesøknader</a>
+                    <a *ngIf="visListe || (visSkjema && skjemaStatus == 'endre')" href="#" (click)="avbryt()">Avbryt</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -14,14 +17,14 @@
 
 <div class="container-fluid">
     <!--VELKOMSTVINDU-->
-    <div class="jumbotron velkomst" *ngIf="velkommen">
+    <!--<div class="jumbotron velkomst" *ngIf="velkommen">
         <div class="text-justify">
             <h1>Velkommen til Angular2 gjeldsbrev</h1>
         </div>
         <div class="center-block">
             <button class="btn regknapp" (click)="tilbake()">Gå til lånekalkulator</button>
         </div>
-    </div>
+    </div>-->
 
 
     <!--KALKULATOR-->
@@ -112,13 +115,13 @@
                             class="btn btn-primary regknapp" (click)="endreMinSoknad()">
                         <span class="glyphicon glyphicon-edit"> Endre</span>
                     </button>
-                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
+                    <!--<button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
                             (click)="slettSoknad(id.value)" class="btn btn-default regknapp" title="Slett søknad">
                         <span class="glyphicon glyphicon-trash"></span>
-                    </button>
+                    </button>-->
                     <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
-                            (click)="avbryt()" class="btn btn-default regknapp" title="Avbryt">
-                        <span class="glyphicon glyphicon-remove">Avbryt</span>
+                            (click)="avbryt()" class="btn btn-default regknapp" title="Avslutt">
+                        <span class="glyphicon glyphicon-remove">Avslutt</span>
                     </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
@@ -133,23 +136,23 @@
 
     <!--Hent en persons søknad(er)-->
     <div class="col-md-6 col-md-offset-1" *ngIf="finnMinSoknad">
-        <h1>Hent min søknad</h1>
+        <h1>Hent mine søknader</h1>
         <form [formGroup]="skjema" class="register-form" (ngSumbit)="vedSubmit()">
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-lg-4">
-                    <label for="belop">Tast inn søknadsnummeret</label>
-                    <input class="form-control" name="id" #data
-                           formControlName="id" />
+                    <label for="belop">Tast inn personnummeret</label>
+                    <input class="form-control" name="personnummer" #data
+                           formControlName="personnummer" />
                     <p class="alert alert-warning"
-                       [hidden]="skjema.controls.id.valid || (skjema.controls.id.pristine && !submitted)">
+                       [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                         Kun heltall. Maks 10 siffer og mimimum 1 siffer.
                     </p>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid" 
-                            class="btn btn-default regknapp" (click)="hentMinSoknad(data.value)">Hent min søknad</button>
+                    <button [disabled]="!skjema.valid" 
+                            class="btn btn-default regknapp" (click)="hentMineSoknader(data.value)">Hent mine søknader</button>
                 </div>
             </div>
         </form>
@@ -173,6 +176,33 @@
                 <button class="btn regknapp" (click)="tilbake()">Ok</button>
             </div>
         </div>
+    </div>
+
+    <div *ngIf="visListe && !okBoks">
+        <table>
+            <tr>
+                <th>Søknadsnummer</th>
+                <th>Lånebeløp</th>
+                <th>Nedbetalingstid</th>
+                <th>Avdrag pr måned</th>
+                <th>Epost</th>
+                <th>Mobiltelefon</th>
+                <th>Personnummer</th>
+            </tr>
+            <tbody *ngFor="let soknad of alleSoknader">
+                <tr>
+                    <td>{{soknad.id}}</td>
+                    <td>{{soknad.belop}}</td>
+                    <td>{{soknad.nedbetalingstid}}</td>
+                    <td>{{soknad.avdragPrMnd}}</td>
+                    <td>{{soknad.epost}}</td>
+                    <td>{{soknad.mobiltelefon}}</td>
+                    <td>{{soknad.personnummer}}</td>
+                    <td><button class="btn regknapp" (click)="hentMinSoknad(soknad)">Endre denne</button></td>
+                    <td><button class="btn regknapp" (click)="slettSoknad(soknad.id)">Slett denne</button></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
 

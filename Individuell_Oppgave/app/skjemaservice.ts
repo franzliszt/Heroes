@@ -19,6 +19,12 @@ export class SkjemaService {
        return Promise.reject(error.message || error);
    }
 
+   hentMineSoknader(id: string): any {
+       alert("inne i hent alle");
+       return this._http.get("api/Bruker/" + id)
+           .map((returdata: Response) => returdata.json() )
+   }
+
    // Lagrer en søknad. -- (fortsetter å feile)
    lagreSoknad(soknad: Soknad): any {
        alert("LAgreservice");
@@ -44,8 +50,8 @@ export class SkjemaService {
    }
 
    // fungerer, men må skrives om
-   slettSoknad(id): Observable<any> {
+   slettSoknad(id): any {
        return this._http.delete("api/Bruker/" + id)
-           .map(returdata => returdata.toString())
+           .map((returdata: Response) => returdata.json())
    }
 }
