@@ -225,7 +225,7 @@ export class SkjemaKontroll implements OnInit {
 
     // Sender til lånekalkulatoren.
     tilbake(): void {
-        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true;
+        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;;
         this.finnMinSoknad = false;
         this.status = false;
         //this.visSkjema = false;
@@ -255,10 +255,18 @@ export class SkjemaKontroll implements OnInit {
     // Avbryte endringer av en hentet søknad og nullstiller skjema.
     // Returnerer til lånekalkulatoren.
     avbryt() {
+        
         this.skjemaStatus = "registrer";
         this.nullstill(); // må endres
         this.visSkjema = false;
         this.visListe = false;
         this.visKalkulator = true;
+    }
+
+    tilOversikt() {
+        alert("Hei");
+        this.visSkjema = false;
+        this.visKalkulator = false;
+        this.visListe = true;
     }
 }

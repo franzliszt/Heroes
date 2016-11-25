@@ -186,7 +186,8 @@ var SkjemaKontroll = (function () {
     };
     // Sender til lånekalkulatoren.
     SkjemaKontroll.prototype.tilbake = function () {
-        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true;
+        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
+        ;
         this.finnMinSoknad = false;
         this.status = false;
         //this.visSkjema = false;
@@ -218,6 +219,12 @@ var SkjemaKontroll = (function () {
         this.visSkjema = false;
         this.visListe = false;
         this.visKalkulator = true;
+    };
+    SkjemaKontroll.prototype.tilOversikt = function () {
+        alert("Hei");
+        this.visSkjema = false;
+        this.visKalkulator = false;
+        this.visListe = true;
     };
     SkjemaKontroll = __decorate([
         core_1.Component({

@@ -8,7 +8,7 @@
                 <li class="active"><a href="#">Hjem</a></li>
                 <li>
                     <a *ngIf="!visListe && skjemaStatus != 'endre'"href="#" (click)="visMinLaneSoknad()">Hent mine lånesøknader</a>
-                    <a *ngIf="visListe || (visSkjema && skjemaStatus == 'endre')" href="#" (click)="avbryt()">Avbryt</a>
+                    <a *ngIf="visListe || (visSkjema && skjemaStatus == 'endre')" href="#" (click)="avbryt()">Avslutt</a>
                 </li>
             </ul>
         </div>
@@ -120,8 +120,8 @@
                         <span class="glyphicon glyphicon-trash"></span>
                     </button>-->
                     <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
-                            (click)="avbryt()" class="btn btn-default regknapp" title="Avslutt">
-                        <span class="glyphicon glyphicon-remove">Avslutt</span>
+                            (click)="tilOversikt()" class="btn btn-default regknapp" title="Til oversikt">
+                        Til min oversikt
                     </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
