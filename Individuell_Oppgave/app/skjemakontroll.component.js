@@ -138,7 +138,6 @@ var SkjemaKontroll = (function () {
     SkjemaKontroll.prototype.hentMineSoknader = function (pnr) {
         var _this = this;
         if (pnr == "") {
-            this.skjema.patchValue({ personnummer: " " });
             return;
         }
         this.service.hentMineSoknader(pnr).subscribe(function (soknader) {

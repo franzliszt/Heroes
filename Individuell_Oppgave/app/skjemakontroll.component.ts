@@ -171,7 +171,6 @@ export class SkjemaKontroll implements OnInit {
     // Henter alle søknader tilhørende en bruker.
     hentMineSoknader(pnr: string): void {
         if (pnr == "") {
-            this.skjema.patchValue({ personnummer: " " });
             return;
         }
         this.service.hentMineSoknader(pnr).subscribe(soknader => {
