@@ -94,30 +94,16 @@ var SkjemaKontroll = (function () {
         var _this = this;
         this.laster = true;
         var soknad = this.opprettSoknad();
-        //if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
-        //    soknad.belop == null || soknad.nedbetalingstid == null) {
-        //    this.skjema.patchValue({ personnummer: "" });
-        //}
-        var ok = true;
-        if (soknad.personnummer == "") {
-            this.skjema.patchValue({ personnummer: "Personnummer er obligatorisk." });
-            ok = false;
+        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
+            soknad.belop == null || soknad.nedbetalingstid == null) {
+            this.skjema.patchValue({ personnummer: "" });
+            return;
         }
-        if (soknad.mobiltelefon == "") {
-            this.skjema.patchValue({ mobiltelefon: "Mobiltelefon er obligatorisk." });
-            ok = false;
-        }
-        if (soknad.epost == "") {
-            this.skjema.patchValue({ epost: "FYLL UT EPOST" });
-            ok = false;
-        }
-        if (ok) {
-            this.service.lagreSoknad(soknad).subscribe(function (retur) { return _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                "Bruk ditt personnummer for å hente din søknadshistorikk."); }, function (error) {
-                _this.statusmelding("Klarte ikke å lagre.");
-            });
-            this.laster = false;
-        }
+        this.service.lagreSoknad(soknad).subscribe(function (retur) { return _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
+            "Bruk ditt personnummer for å hente din søknadshistorikk."); }, function (error) {
+            _this.statusmelding("Klarte ikke å lagre.");
+        });
+        this.laster = false;
     };
     // Hjelpemetode for å hente data fra skjemaet og oppretter en søknad.
     SkjemaKontroll.prototype.opprettSoknad = function () {

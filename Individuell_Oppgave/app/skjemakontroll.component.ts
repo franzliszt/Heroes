@@ -122,35 +122,18 @@ export class SkjemaKontroll implements OnInit {
     lagreSoknad(): void {
         this.laster = true;
         let soknad = this.opprettSoknad();
-        //if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
-        //    soknad.belop == null || soknad.nedbetalingstid == null) {
-        //    this.skjema.patchValue({ personnummer: "" });
-
-        //}
-        let ok: boolean = true;
-
-        if (soknad.personnummer == "") {
-            this.skjema.patchValue({ personnummer: "Personnummer er obligatorisk." });
-            ok = false;
+        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
+            soknad.belop == null || soknad.nedbetalingstid == null) {
+            this.skjema.patchValue({ personnummer: "" });
+            return;
         }
-        if (soknad.mobiltelefon == "") {
-            this.skjema.patchValue({ mobiltelefon: "Mobiltelefon er obligatorisk." });
-            ok = false;
-        }
-        if (soknad.epost == "") {
-            this.skjema.patchValue({ epost: "FYLL UT EPOST" });
-            ok = false;
-        }
-        
-        if (ok) {
-            this.service.lagreSoknad(soknad).subscribe(
-                retur => this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                    "Bruk ditt personnummer for å hente din søknadshistorikk."),
-                error => {
-                    this.statusmelding("Klarte ikke å lagre.");
-                });
-            this.laster = false;
-        }
+        this.service.lagreSoknad(soknad).subscribe(
+            retur => this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
+                "Bruk ditt personnummer for å hente din søknadshistorikk."),
+            error => {
+                this.statusmelding("Klarte ikke å lagre.");
+            });
+        this.laster = false;
         
     }
     
