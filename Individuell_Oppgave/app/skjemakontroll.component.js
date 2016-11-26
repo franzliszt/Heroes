@@ -42,6 +42,7 @@ var SkjemaKontroll = (function () {
         this.visSkjema = false;
         this.visKalkulator = true;
     };
+    // denne må endres og fikses
     SkjemaKontroll.prototype.vedSubmit = function () {
         if (this.skjemaStatus == "registrer") {
             this.lagreSoknad();
@@ -51,7 +52,7 @@ var SkjemaKontroll = (function () {
                 + "Vennligst prøv igjen senere.");
         }
     };
-    // Nullstiller skjemaet.
+    // Nullstiller skjema.
     SkjemaKontroll.prototype.nullstill = function () {
         this.skjema.patchValue({ id: "" });
         this.skjema.patchValue({ personnummer: "" });
@@ -84,29 +85,39 @@ var SkjemaKontroll = (function () {
         this.visSkjema = true;
         this.visKalkulator = false;
     };
-    // Kalkulerer avdrag pr mnd.
     SkjemaKontroll.prototype.kalkulerAvdrag = function () {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
-        //let y = (0.07 * this.belop) /
-        //    (1 - Math.pow((1 + 0.079), -this.tid));
-        //this.avdrag = (parseFloat((y / 12).toFixed(2)));
     };
-    /* *****Metoder som kaller på tjenesten mot api***** */
+    /* *****Metoder som subscribes***** */
     // lagrer en søknad og virket -- ikke ferdig
     SkjemaKontroll.prototype.lagreSoknad = function () {
         var _this = this;
         this.laster = true;
         var soknad = this.opprettSoknad();
-        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
-            soknad.belop == null || soknad.nedbetalingstid == null) {
-            this.skjema.patchValue({ personnummer: " " });
-            return;
+        //if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
+        //    soknad.belop == null || soknad.nedbetalingstid == null) {
+        //    this.skjema.patchValue({ personnummer: "" });
+        //}
+        var ok = true;
+        if (soknad.personnummer == "") {
+            this.skjema.patchValue({ personnummer: "Personnummer er obligatorisk." });
+            ok = false;
         }
-        this.service.lagreSoknad(soknad).subscribe(function (retur) { return _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-            "Bruk ditt personnummer for å hente din søknadshistorikk."); }, function (error) {
-            _this.statusmelding("Klarte ikke å lagre.");
-        });
-        this.laster = false;
+        if (soknad.mobiltelefon == "") {
+            this.skjema.patchValue({ mobiltelefon: "Mobiltelefon er obligatorisk." });
+            ok = false;
+        }
+        if (soknad.epost == "") {
+            this.skjema.patchValue({ epost: "FYLL UT EPOST" });
+            ok = false;
+        }
+        if (ok) {
+            this.service.lagreSoknad(soknad).subscribe(function (retur) { return _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
+                "Bruk ditt personnummer for å hente din søknadshistorikk."); }, function (error) {
+                _this.statusmelding("Klarte ikke å lagre.");
+            });
+            this.laster = false;
+        }
     };
     // Hjelpemetode for å hente data fra skjemaet og oppretter en søknad.
     SkjemaKontroll.prototype.opprettSoknad = function () {

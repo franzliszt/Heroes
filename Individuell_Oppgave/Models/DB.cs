@@ -94,25 +94,6 @@ namespace Individuell_Oppgave.Models {
             }
         }
 
-        // henter alle lagrede søknader -- ikke i bruk
-        //public List<Soknad> hentAlleSoknader(string pnr) {
-        //    using (var db = new DatabaseContext()) {
-        //        List<Soknad> soknader = 
-        //            db.Soknader.Select(s => new Soknad() {
-        //                id = s.SoknadsID,
-        //                personnummer = s.Personnummer,
-        //                mobiltelefon = s.Mobiltelefon,
-        //                epost = s.Epost,
-        //                belop = s.Belop,
-        //                nedbetalingstid = s.Nedbetalingstid,
-        //                avdragPrMnd = s.AvdragPrMnd
-        //        }).Where(p => p.personnummer == pnr).ToList();
-
-        //        if (soknader == null) { return null; }
-        //        return soknader;
-        //    }
-        //}
-
         // henter alle søknader registrert på et personnummer
         public List<Soknad> hentMineSoknader(string pnr) {
             using (var db = new DatabaseContext()) {

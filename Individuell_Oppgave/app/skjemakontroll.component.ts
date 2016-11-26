@@ -64,6 +64,7 @@ export class SkjemaKontroll implements OnInit {
         this.visKalkulator = true;
     }
 
+    // denne må endres og fikses
     vedSubmit(): void {
         if (this.skjemaStatus == "registrer") {
             this.lagreSoknad();
@@ -73,7 +74,7 @@ export class SkjemaKontroll implements OnInit {
         } 
     }
 
-    // Nullstiller skjemaet.
+    // Nullstiller skjema.
     nullstill(): void {
         this.skjema.patchValue({ id: "" });
         this.skjema.patchValue({ personnummer: "" });
@@ -103,39 +104,54 @@ export class SkjemaKontroll implements OnInit {
     }
 
     // Viser søknadsskjemaet.
-    tilSkjema() {
+    tilSkjema(): void {
         (!this.visListe) ? this.skjemaStatus == "endre" : this.skjemaStatus = "registrer";
         this.finnMinSoknad = false;
         this.visSkjema = true;
         this.visKalkulator = false;
     }
 
-    // Kalkulerer avdrag pr mnd.
     kalkulerAvdrag(): void {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
-        //let y = (0.07 * this.belop) /
-        //    (1 - Math.pow((1 + 0.079), -this.tid));
-        //this.avdrag = (parseFloat((y / 12).toFixed(2)));
     }
 
-    /* *****Metoder som kaller på tjenesten mot api***** */
+
+    /* *****Metoder som subscribes***** */
 
     // lagrer en søknad og virket -- ikke ferdig
     lagreSoknad(): void {
         this.laster = true;
         let soknad = this.opprettSoknad();
-        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
-            soknad.belop == null || soknad.nedbetalingstid == null) {
-            this.skjema.patchValue({ personnummer: " " });
-            return;
+        //if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
+        //    soknad.belop == null || soknad.nedbetalingstid == null) {
+        //    this.skjema.patchValue({ personnummer: "" });
+
+        //}
+        let ok: boolean = true;
+
+        if (soknad.personnummer == "") {
+            this.skjema.patchValue({ personnummer: "Personnummer er obligatorisk." });
+            ok = false;
         }
-        this.service.lagreSoknad(soknad).subscribe(
-            retur => this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" + 
-                        "Bruk ditt personnummer for å hente din søknadshistorikk."),
-            error => {
-                this.statusmelding("Klarte ikke å lagre.");
-            });
-        this.laster = false;
+        if (soknad.mobiltelefon == "") {
+            this.skjema.patchValue({ mobiltelefon: "Mobiltelefon er obligatorisk." });
+            ok = false;
+        }
+        if (soknad.epost == "") {
+            this.skjema.patchValue({ epost: "FYLL UT EPOST" });
+            ok = false;
+        }
+        
+        if (ok) {
+            this.service.lagreSoknad(soknad).subscribe(
+                retur => this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
+                    "Bruk ditt personnummer for å hente din søknadshistorikk."),
+                error => {
+                    this.statusmelding("Klarte ikke å lagre.");
+                });
+            this.laster = false;
+        }
+        
     }
     
 
@@ -238,7 +254,7 @@ export class SkjemaKontroll implements OnInit {
     }
 
     // Viser en meldingsboks med informasjon når en operasjon går ikke bra.
-    statusmelding(inputFeil: string): void {
+    private statusmelding(inputFeil: string): void {
         this.finnMinSoknad = false;
         this.visSkjema = false;
         this.visKalkulator = false;
@@ -247,7 +263,7 @@ export class SkjemaKontroll implements OnInit {
     }
 
     // Viser en meldingsboks med informasjon når en operasjon går bra.
-    ok(okMelding: string): void {
+    private ok(okMelding: string): void {
         this.finnMinSoknad = false;
         this.visSkjema = false;
         this.visKalkulator = false;

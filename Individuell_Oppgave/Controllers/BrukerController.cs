@@ -31,44 +31,6 @@ namespace Individuell_Oppgave.Controllers {
 
         }
 
-
-        //[HttpGet]
-        //public HttpResponseMessage Get(int id) {
-        //    Soknad resultat = new DB().hentMinSoknad(id);
-
-        //    if (resultat != null) {
-        //        var json = new JavaScriptSerializer();
-        //        string jsonString = json.Serialize(resultat);
-
-        //        return new HttpResponseMessage() {
-        //            Content = new StringContent(jsonString, Encoding.UTF8,
-        //            "application/json"), StatusCode = HttpStatusCode.OK
-        //        };
-        //    } else {
-        //        return new HttpResponseMessage() {
-        //            StatusCode = HttpStatusCode.BadRequest,
-        //            Content = new StringContent("Fant ingen søknader som samsvarte med søknadsnummeret.")
-        //        };
-        //    }
-        //}
-
-        // henter alle søknader til en person
-        //public HttpResponseMessage Get(string pnr, int i = 0) {
-        //    List<Soknad> liste = new DB().hentMineSoknader(pnr);
-        //    if (liste != null) {
-        //        var j = new JavaScriptSerializer();
-        //        return new HttpResponseMessage() {
-        //            Content = new StringContent(j.Serialize(liste), Encoding.UTF8, "application/json"),
-        //            StatusCode = HttpStatusCode.OK
-        //        };
-        //    } else {
-        //        return new HttpResponseMessage() {
-        //            StatusCode = HttpStatusCode.BadRequest,
-        //            Content = new StringContent("Fant ingen søknader som samsvarte med personnummeret.")
-        //        };
-        //    }
-        //}
-
         // lagrer en søknad
 
         // LAGRE
