@@ -53,25 +53,16 @@ export class SkjemaKontroll implements OnInit {
 
     // Initialiserer nødvendighet.
     ngOnInit(): void {
+        alert(((0.07 * 210000) /
+            (1 - Math.pow((1 + 0.07), -5))) / 12);
         this.kalkulator = new Kalkulator();
         this.belop = 150000;
         this.tid = 5;
         this.kalkulerAvdrag();
-        this.nullstill();
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
         this.visKalkulator = true;
-    }
-
-    // denne må endres og fikses
-    vedSubmit(): void {
-        if (this.skjemaStatus == "registrer") {
-            this.lagreSoknad();
-        } else {
-            this.statusmelding("Opps. Her gikk det galt. Vi holder på å reparere problemet.\n"
-                + "Vennligst prøv igjen senere.");
-        } 
     }
 
     // Nullstiller skjema.
@@ -83,29 +74,32 @@ export class SkjemaKontroll implements OnInit {
         this.skjema.patchValue({ belop: "" });
         this.skjema.patchValue({ nedbetalingstid: "" });
         this.skjema.patchValue({ avdrag: "" });
-        this.settStartverdier();
+        //this.settStartverdier();
     }
 
     // Startverdier på slidere.
     private settStartverdier(): void {
         this.belop = 150000;
         this.tid = 5;
+        this.kalkulerAvdrag();
     }
 
     // ikke ferdig
     visMinLaneSoknad(): void {
+        this.nullstill();
+        this.settStartverdier();
         this.melding = "";
         this.skjema.patchValue({ personnummer: "" });
         this.visKalkulator = false;
         this.visSkjema = false;
         this.visListe = false;
-        //this.skjemaStatus = "endre";
         this.finnMinSoknad = true;
     }
 
     // Viser søknadsskjemaet.
     tilSkjema(): void {
-        (!this.visListe) ? this.skjemaStatus == "endre" : this.skjemaStatus = "registrer";
+       // (!this.visListe) ? this.skjemaStatus == "endre" : this.skjemaStatus = "registrer";
+        if (this.skjemaStatus == "registrer") { this.nullstill(); }
         this.finnMinSoknad = false;
         this.visSkjema = true;
         this.visKalkulator = false;
@@ -113,6 +107,16 @@ export class SkjemaKontroll implements OnInit {
 
     kalkulerAvdrag(): void {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
+    }
+
+    vedSubmit() {
+        if (this.skjemaStatus == "registrer") {
+            this.lagreSoknad();
+        } else if (this.skjemaStatus == "endre") {
+            this.endreMinSoknad();
+        } else {
+            this.statusmelding("En alvorlig feil har oppstått.\nVennligst prøv igjen litt senere");
+        }
     }
 
 
@@ -230,7 +234,7 @@ export class SkjemaKontroll implements OnInit {
 
     // Sender til lånekalkulatoren.
     tilbake(): void {
-        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;;
+        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
         this.finnMinSoknad = false;
         this.status = false;
         this.okBoks = false;
@@ -260,6 +264,7 @@ export class SkjemaKontroll implements OnInit {
     avbryt(): void {
         this.skjemaStatus = "registrer";
         this.nullstill(); // må endres
+        this.settStartverdier();
         this.visSkjema = false;
         this.visListe = false;
         this.visKalkulator = true;

@@ -30,7 +30,7 @@
                 <div class="hoyre-label">700 000 kr</div>
                 <div>
                     <input type="range" min="10000" max="700000" [(ngModel)]="belop" 
-                           (ngModel)="avdrag" step="5000"  (input)="kalkulerAvdrag()" />
+                            step="5000"  (input)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id="boksinput" value="{{ belop }}" />
@@ -61,13 +61,13 @@
     </div>
 
 
-    <!--SØKNADSSKJEMA-->
+    <!-- Søknadsskjema -->
     <div class="boks" *ngIf="visSkjema && !status">
         <p style="color:#eaeaea; font-size: 2em;" class="boksinput">
             Ønsket lånebeløp <input id="boksinput" value="{{ belop }}" /> kr.
         </p>
 
-        <form [formGroup]="skjema"  class="register-form">
+        <form [formGroup]="skjema"  class="register-form" (ngSubmit)="vedSubmit()">
             <input class="form-control" formControlName="id" type="hidden" #id />
             <div class="inputPersonalia">Personnummer</div>
             <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" />
@@ -99,12 +99,12 @@
             <hr />
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
-                    <button *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid"
-                            class="btn btn-default regknapp" (click)="lagreSoknad()" title="Registrer søknad">
+                    <button type="submit" *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid"
+                            class="btn btn-default regknapp"  title="Oppretter en søknad">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
-                    <button *ngIf="skjemaStatus=='endre'" title="Bekreft endring" [disabled]="!skjema.valid"
-                            class="btn btn-primary regknapp" (click)="endreMinSoknad()">Bekreft endring
+                    <button type="submit" *ngIf="skjemaStatus=='endre'" title="Endrer søknaden" [disabled]="!skjema.valid"
+                            class="btn btn-primary regknapp" >Bekreft endring
                     </button>
                     <button *ngIf="skjemaStatus=='endre'" 
                             (click)="tilOversikt()" class="btn btn-default regknapp" title="Til oversikt">

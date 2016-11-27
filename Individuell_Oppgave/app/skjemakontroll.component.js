@@ -32,25 +32,16 @@ var SkjemaKontroll = (function () {
     }
     // Initialiserer nødvendighet.
     SkjemaKontroll.prototype.ngOnInit = function () {
+        alert(((0.07 * 210000) /
+            (1 - Math.pow((1 + 0.07), -5))) / 12);
         this.kalkulator = new kalkulator_1.Kalkulator();
         this.belop = 150000;
         this.tid = 5;
         this.kalkulerAvdrag();
-        this.nullstill();
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
         this.visKalkulator = true;
-    };
-    // denne må endres og fikses
-    SkjemaKontroll.prototype.vedSubmit = function () {
-        if (this.skjemaStatus == "registrer") {
-            this.lagreSoknad();
-        }
-        else {
-            this.statusmelding("Opps. Her gikk det galt. Vi holder på å reparere problemet.\n"
-                + "Vennligst prøv igjen senere.");
-        }
     };
     // Nullstiller skjema.
     SkjemaKontroll.prototype.nullstill = function () {
@@ -61,32 +52,48 @@ var SkjemaKontroll = (function () {
         this.skjema.patchValue({ belop: "" });
         this.skjema.patchValue({ nedbetalingstid: "" });
         this.skjema.patchValue({ avdrag: "" });
-        this.settStartverdier();
+        //this.settStartverdier();
     };
     // Startverdier på slidere.
     SkjemaKontroll.prototype.settStartverdier = function () {
         this.belop = 150000;
         this.tid = 5;
+        this.kalkulerAvdrag();
     };
     // ikke ferdig
     SkjemaKontroll.prototype.visMinLaneSoknad = function () {
+        this.nullstill();
+        this.settStartverdier();
         this.melding = "";
         this.skjema.patchValue({ personnummer: "" });
         this.visKalkulator = false;
         this.visSkjema = false;
         this.visListe = false;
-        //this.skjemaStatus = "endre";
         this.finnMinSoknad = true;
     };
     // Viser søknadsskjemaet.
     SkjemaKontroll.prototype.tilSkjema = function () {
-        (!this.visListe) ? this.skjemaStatus == "endre" : this.skjemaStatus = "registrer";
+        // (!this.visListe) ? this.skjemaStatus == "endre" : this.skjemaStatus = "registrer";
+        if (this.skjemaStatus == "registrer") {
+            this.nullstill();
+        }
         this.finnMinSoknad = false;
         this.visSkjema = true;
         this.visKalkulator = false;
     };
     SkjemaKontroll.prototype.kalkulerAvdrag = function () {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
+    };
+    SkjemaKontroll.prototype.vedSubmit = function () {
+        if (this.skjemaStatus == "registrer") {
+            this.lagreSoknad();
+        }
+        else if (this.skjemaStatus == "endre") {
+            this.endreMinSoknad();
+        }
+        else {
+            this.statusmelding("En alvorlig feil har oppstått.\nVennligst prøv igjen litt senere");
+        }
     };
     /* *****Metoder som subscribes***** */
     // lagrer en søknad og virket -- ikke ferdig
@@ -191,7 +198,6 @@ var SkjemaKontroll = (function () {
     // Sender til lånekalkulatoren.
     SkjemaKontroll.prototype.tilbake = function () {
         (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
-        ;
         this.finnMinSoknad = false;
         this.status = false;
         this.okBoks = false;
@@ -218,6 +224,7 @@ var SkjemaKontroll = (function () {
     SkjemaKontroll.prototype.avbryt = function () {
         this.skjemaStatus = "registrer";
         this.nullstill(); // må endres
+        this.settStartverdier();
         this.visSkjema = false;
         this.visListe = false;
         this.visKalkulator = true;
