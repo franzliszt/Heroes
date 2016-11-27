@@ -106,7 +106,7 @@
                     <button *ngIf="skjemaStatus=='endre'" title="Bekreft endring" [disabled]="!skjema.valid"
                             class="btn btn-primary regknapp" (click)="endreMinSoknad()">Bekreft endring
                     </button>
-                    <button *ngIf="skjemaStatus=='endre'" [disabled]="!skjema.valid"
+                    <button *ngIf="skjemaStatus=='endre'" 
                             (click)="tilOversikt()" class="btn btn-default regknapp" title="Til oversikt">
                         Til min oversikt
                     </button>
