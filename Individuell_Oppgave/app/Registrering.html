@@ -30,7 +30,7 @@
                 <div class="hoyre-label">700 000 kr</div>
                 <div>
                     <input type="range" min="10000" max="700000" [(ngModel)]="belop" 
-                            step="5000"  (input)="kalkulerAvdrag()" />
+                            step="5000" (input)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id="boksinput" value="{{ belop }}" />
@@ -43,7 +43,7 @@
                 <div class="hoyre-label">20 år</div>
                 <div>
                     <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" 
-                          (input)="kalkulerAvdrag()"  />
+                          (input)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id=boksinput value="{{ tid }}" />
@@ -69,23 +69,23 @@
 
         <form [formGroup]="skjema"  class="register-form" (ngSubmit)="vedSubmit()">
             <input class="form-control" formControlName="id" type="hidden" #id />
-            <div class="inputPersonalia">Personnummer</div>
+            <label class="inputPersonalia">Personnummer</label>
             <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" />
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                 Kun 11 siffer!
             </p>
 
-            <div class="inputPersonalia">Mobiltelefon</div>
+            <label class="inputPersonalia">Mobiltelefon</label>
             <input class="form-control" name="mobiltelefon" formControlName="mobiltelefon" placeholder="8 siffer" />
-            <p class="alert alert-warning"
+            <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.mobiltelefon.valid || (skjema.controls.mobiltelefon.pristine && !submitted)">
                 Kun 8 siffer!
             </p>
 
-            <div class="inputPersonalia">Epost</div>
+            <label class="inputPersonalia">Epost</label>
             <input class="form-control" name="epost" formControlName="epost" placeholder="Din epost" />
-            <p class="alert alert-warning"
+            <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
                 Ugyldig epost!
             </p>

@@ -53,7 +53,7 @@ export class SkjemaKontroll implements OnInit {
 
     // Initialiserer nødvendighet.
     ngOnInit(): void {
-        alert(((0.07 * 210000) /
+        alert(((0.07 * 150000) /
             (1 - Math.pow((1 + 0.07), -5))) / 12);
         this.kalkulator = new Kalkulator();
         this.belop = 150000;

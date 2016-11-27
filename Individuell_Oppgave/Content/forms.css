@@ -1,16 +1,15 @@
-﻿.ng-valid[required], .ng-valid.required  {
-  border-left: 8px solid #42A948; /* green */
-}
-
-.ng-invalid:not(form)  {
-  border-left: 8px solid #a94442; /* red */
-}
-
-body, html{
+﻿body, html{
     background-color:#34515E;
    font-family: 'Open Sans Condensed', sans-serif;
     font-size: 18px;
+}
 
+.ng-valid[required], .ng-valid.required  {
+  border-left: 8px solid #42A948;
+}
+
+.ng-invalid:not(form)  {
+  border-left: 8px solid #a94442;
 }
 
 

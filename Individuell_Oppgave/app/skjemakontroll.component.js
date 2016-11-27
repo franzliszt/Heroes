@@ -32,7 +32,7 @@ var SkjemaKontroll = (function () {
     }
     // Initialiserer nødvendighet.
     SkjemaKontroll.prototype.ngOnInit = function () {
-        alert(((0.07 * 210000) /
+        alert(((0.07 * 150000) /
             (1 - Math.pow((1 + 0.07), -5))) / 12);
         this.kalkulator = new kalkulator_1.Kalkulator();
         this.belop = 150000;
