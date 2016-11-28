@@ -23,7 +23,6 @@ var SkjemaKontroll = (function () {
             id: ["", forms_1.Validators.pattern("[0-9]{1,10}")],
             personnummer: ["", forms_1.Validators.pattern("[0-9]{11}")],
             mobiltelefon: ["", forms_1.Validators.pattern("[0-9]{8}")],
-            // ikke helt bra -- epost
             epost: ["", forms_1.Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")],
             belop: ["", forms_1.Validators.pattern("[0-9]{4,7}")],
             nedbetalingstid: ["", forms_1.Validators.pattern("[0-9]{1,2}")],
@@ -32,12 +31,8 @@ var SkjemaKontroll = (function () {
     }
     // Initialiserer nødvendighet.
     SkjemaKontroll.prototype.ngOnInit = function () {
-        alert(((0.07 * 150000) /
-            (1 - Math.pow((1 + 0.07), -5))) / 12);
         this.kalkulator = new kalkulator_1.Kalkulator();
-        this.belop = 150000;
-        this.tid = 5;
-        this.kalkulerAvdrag();
+        this.settStartverdier();
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
@@ -52,7 +47,6 @@ var SkjemaKontroll = (function () {
         this.skjema.patchValue({ belop: "" });
         this.skjema.patchValue({ nedbetalingstid: "" });
         this.skjema.patchValue({ avdrag: "" });
-        //this.settStartverdier();
     };
     // Startverdier på slidere.
     SkjemaKontroll.prototype.settStartverdier = function () {
@@ -73,7 +67,6 @@ var SkjemaKontroll = (function () {
     };
     // Viser søknadsskjemaet.
     SkjemaKontroll.prototype.tilSkjema = function () {
-        // (!this.visListe) ? this.skjemaStatus == "endre" : this.skjemaStatus = "registrer";
         if (this.skjemaStatus == "registrer") {
             this.nullstill();
         }
@@ -106,8 +99,11 @@ var SkjemaKontroll = (function () {
             this.skjema.patchValue({ personnummer: "" });
             return;
         }
-        this.service.lagreSoknad(soknad).subscribe(function (retur) { return _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-            "Bruk ditt personnummer for å hente din søknadshistorikk."); }, function (error) {
+        this.service.lagreSoknad(soknad).subscribe(function (retur) {
+            _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
+                "Bruk ditt personnummer for å hente din søknadshistorikk.");
+            _this.settStartverdier();
+        }, function (error) {
             _this.statusmelding("Klarte ikke å lagre.");
         });
         this.laster = false;

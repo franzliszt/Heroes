@@ -26,11 +26,11 @@
             </div>
             <div>
                 <h3 class="kategori">Lånebeløp</h3>
-                <div class="venstre-label">10 000 kr</div>
-                <div class="hoyre-label">700 000 kr</div>
+                <label class="venstre-label">10 000 kr</label>
+                <label class="hoyre-label">700 000 kr</label>
                 <div>
                     <input type="range" min="10000" max="700000" [(ngModel)]="belop" 
-                            step="5000" (input)="kalkulerAvdrag()" />
+                            step="5000" (ngModelChange)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id="boksinput" value="{{ belop }}" />
@@ -39,25 +39,28 @@
             </div>
             <div>
                 <h3 class="kategori">Nedbetalingstid</h3>
-                <div class="venstre-label">3 år</div>
-                <div class="hoyre-label">20 år</div>
+                <label class="venstre-label">3 år</label>
+                <label class="hoyre-label">20 år</label>
                 <div>
                     <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" 
-                          (input)="kalkulerAvdrag()" />
+                          (ngModelChange)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id=boksinput value="{{ tid }}" />
+                </div>
+                <div style="float: right;">
+                    <button *ngIf="skjemaStatus == 'registrer'" class="btn btn-default videreknapp" (click)="tilSkjema()">Søk nå</button>
+                    <button *ngIf="skjemaStatus == 'endre'" class="btn btn-default videreknapp" (click)="tilSkjema()">Til skjema</button>
                 </div>
             </div>
             <div class="info">
                 <h2 style="color:#eaeaea;">{{ avdrag }} kr <small style="color:#eaeaea;">pr mnd</small></h2>
             </div>
-            <div id="litentekst">
+            <div style="color: #888888;">
                 <p><small>* Effektiv rente 7%. <br />Ved å trykke "søk nå" godtar du mine vilkår.</small></p>
             </div>
         </div>
-        <button *ngIf="skjemaStatus == 'registrer'" class="btn btn-default logbutton" (click)="tilSkjema()">Søk nå</button>
-        <button *ngIf="skjemaStatus == 'endre'" class="btn btn-default logbutton" (click)="tilSkjema()">Til endring</button>
+        
     </div>
 
 
@@ -115,7 +118,7 @@
                     
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button class="btn btn-default logbutton" (click)="tilbake()">Endre lånebeløpet her</button>
+                    <button class="btn btn-default videreknapp" (click)="tilbake()">Endre lånebeløpet her</button>
                 </div>
             </div>
         </form>
@@ -146,7 +149,7 @@
             </div>
         </form>
 
-        <button class="btn btn-default logbutton" (click)="tilbake()">Søk om lån</button>
+        <button class="btn btn-default videreknapp" (click)="tilbake()">Søk om lån</button>
     </div>
 
     <div *ngIf="status">

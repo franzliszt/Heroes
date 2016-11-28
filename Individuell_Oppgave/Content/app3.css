@@ -55,6 +55,22 @@
     color: #222222;
 }
 
+.videreknapp {
+    height: 50px;
+    width: 200px;
+    background-color:yellowgreen;
+    border-radius: 0px;
+    font-size: 18px;
+    color:#111111;
+    border: none !important;
+    margin-bottom: 5px;
+}
+
+.videreknapp:hover {
+    color: #222222;
+    background-color:limegreen;
+}
+
 .minTabell {
     color: #eaeaea;
 }

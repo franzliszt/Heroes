@@ -43,7 +43,6 @@ export class SkjemaKontroll implements OnInit {
             id: ["", Validators.pattern("[0-9]{1,10}")],
             personnummer: ["", Validators.pattern("[0-9]{11}")],
             mobiltelefon: ["", Validators.pattern("[0-9]{8}")],
-            // ikke helt bra -- epost
             epost: ["", Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")],
             belop: ["", Validators.pattern("[0-9]{4,7}")],
             nedbetalingstid: ["", Validators.pattern("[0-9]{1,2}")],
@@ -53,12 +52,8 @@ export class SkjemaKontroll implements OnInit {
 
     // Initialiserer nødvendighet.
     ngOnInit(): void {
-        alert(((0.07 * 150000) /
-            (1 - Math.pow((1 + 0.07), -5))) / 12);
         this.kalkulator = new Kalkulator();
-        this.belop = 150000;
-        this.tid = 5;
-        this.kalkulerAvdrag();
+        this.settStartverdier();
         this.laster = true;
         this.skjemaStatus = "registrer";
         this.visSkjema = false;
@@ -74,7 +69,6 @@ export class SkjemaKontroll implements OnInit {
         this.skjema.patchValue({ belop: "" });
         this.skjema.patchValue({ nedbetalingstid: "" });
         this.skjema.patchValue({ avdrag: "" });
-        //this.settStartverdier();
     }
 
     // Startverdier på slidere.
@@ -98,7 +92,6 @@ export class SkjemaKontroll implements OnInit {
 
     // Viser søknadsskjemaet.
     tilSkjema(): void {
-       // (!this.visListe) ? this.skjemaStatus == "endre" : this.skjemaStatus = "registrer";
         if (this.skjemaStatus == "registrer") { this.nullstill(); }
         this.finnMinSoknad = false;
         this.visSkjema = true;
@@ -132,8 +125,11 @@ export class SkjemaKontroll implements OnInit {
             return;
         }
         this.service.lagreSoknad(soknad).subscribe(
-            retur => this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                "Bruk ditt personnummer for å hente din søknadshistorikk."),
+            retur => {
+                this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
+                    "Bruk ditt personnummer for å hente din søknadshistorikk.");
+                this.settStartverdier();
+            },
             error => {
                 this.statusmelding("Klarte ikke å lagre.");
             });
