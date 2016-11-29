@@ -65,22 +65,22 @@
         <p style="color:#eaeaea; font-size: 2em;" class="boksinput">
             Ønsket lånebeløp <input id="boksinput" value="{{ belop }}" /> kr.
         </p>
-        <form [formGroup]="skjema" class="register-form" (ngSubmit)="vedSubmit()">
+        <form [formGroup]="skjema" class="register-form" (ngSubmit)="vedSubmit()" #ctrl="ngForm">
             <input class="form-control" formControlName="id" type="hidden" #id />
             <label class="inputPersonalia">Personnummer</label>
-            <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" />
+            <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" required/>
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                 Kun 11 siffer!
             </p>
             <label class="inputPersonalia">Mobiltelefon</label>
-            <input class="form-control" name="mobiltelefon" formControlName="mobiltelefon" placeholder="8 siffer" />
+            <input class="form-control" name="mobiltelefon" formControlName="mobiltelefon" placeholder="8 siffer" required/>
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.mobiltelefon.valid || (skjema.controls.mobiltelefon.pristine && !submitted)">
                 Kun 8 siffer!
             </p>
             <label class="inputPersonalia">Epost</label>
-            <input class="form-control" name="epost" formControlName="epost" placeholder="Din epost" />
+            <input class="form-control" name="epost" formControlName="epost" placeholder="Din epost" required/>
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
                 Ugyldig epost!
@@ -92,7 +92,7 @@
             <hr />
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
-                    <button type="submit" *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid"
+                    <button type="submit" *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid || !ctrl.form.valid"
                             class="btn btn-default regknapp" title="Oppretter en søknad">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
