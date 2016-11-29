@@ -127,7 +127,7 @@ export class SkjemaKontroll implements OnInit {
         this.service.lagreSoknad(soknad).subscribe(
             retur => {
                 this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                    "Bruk ditt personnummer for å hente din søknadshistorikk.");
+                    "Bruk ditt personnummer for å se dine søknader.");
                 this.settStartverdier();
             },
             error => {

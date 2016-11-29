@@ -1,4 +1,4 @@
-﻿<div *ngIf="!velkommen && !status && !okBoks">
+﻿<div *ngIf="!status && !okBoks">
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -7,7 +7,7 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Hjem</a></li>
                 <li>
-                    <a *ngIf="skjemaStatus != 'endre'"href="#" (click)="visMinLaneSoknad()">Hent mine lånesøknader</a>
+                    <a *ngIf="skjemaStatus != 'endre'" href="#" (click)="visMinLaneSoknad()">Hent mine lånesøknader</a>
                     <a *ngIf="skjemaStatus == 'endre'" href="#" (click)="avbryt()">Avslutt</a>
                 </li>
             </ul>
@@ -16,9 +16,7 @@
 </div>
 
 <div class="container-fluid">
-
-
-    <!--KALKULATOR-->
+    <!--Lånekalkulator -->
     <div *ngIf="visKalkulator && !status">
         <div class="boks">
             <div class="text-left">
@@ -29,21 +27,20 @@
                 <label class="venstre-label">10 000 kr</label>
                 <label class="hoyre-label">700 000 kr</label>
                 <div>
-                    <input type="range" min="10000" max="700000" [(ngModel)]="belop" 
-                            step="5000" (ngModelChange)="kalkulerAvdrag()" />
+                    <input type="range" min="10000" max="700000" [(ngModel)]="belop"
+                           step="5000" (ngModelChange)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id="boksinput" value="{{ belop }}" />
                 </div>
-                
             </div>
             <div>
                 <h3 class="kategori">Nedbetalingstid</h3>
                 <label class="venstre-label">3 år</label>
                 <label class="hoyre-label">20 år</label>
                 <div>
-                    <input type="range" min="3" max="20" [(ngModel)]="tid" step="1" 
-                          (ngModelChange)="kalkulerAvdrag()" />
+                    <input type="range" min="3" max="20" [(ngModel)]="tid" step="1"
+                           (ngModelChange)="kalkulerAvdrag()" />
                 </div>
                 <div>
                     <input id=boksinput value="{{ tid }}" />
@@ -60,17 +57,15 @@
                 <p><small>* Effektiv rente 7%. <br />Ved å trykke "søk nå" godtar du mine vilkår.</small></p>
             </div>
         </div>
-        
-    </div>
 
+    </div>
 
     <!-- Søknadsskjema -->
     <div class="boks" *ngIf="visSkjema && !status">
         <p style="color:#eaeaea; font-size: 2em;" class="boksinput">
             Ønsket lånebeløp <input id="boksinput" value="{{ belop }}" /> kr.
         </p>
-
-        <form [formGroup]="skjema"  class="register-form" (ngSubmit)="vedSubmit()">
+        <form [formGroup]="skjema" class="register-form" (ngSubmit)="vedSubmit()">
             <input class="form-control" formControlName="id" type="hidden" #id />
             <label class="inputPersonalia">Personnummer</label>
             <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" />
@@ -78,44 +73,39 @@
                [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                 Kun 11 siffer!
             </p>
-
             <label class="inputPersonalia">Mobiltelefon</label>
             <input class="form-control" name="mobiltelefon" formControlName="mobiltelefon" placeholder="8 siffer" />
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.mobiltelefon.valid || (skjema.controls.mobiltelefon.pristine && !submitted)">
                 Kun 8 siffer!
             </p>
-
             <label class="inputPersonalia">Epost</label>
             <input class="form-control" name="epost" formControlName="epost" placeholder="Din epost" />
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
                 Ugyldig epost!
             </p>
-
-            
             <input type="hidden" class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
             <input type="hidden" class="form-control" name="belop" formControlName="belop" placeholder="8 siffer" />
             <input type="hidden" class="form-control" name="avdrag" formControlName="avdrag" placeholder="8 siffer" />
-            
             <p style="color:#eaeaea;">Nedbetaling over {{tid}} år. Avdrag {{avdrag}} kr/mnd.</p>
             <hr />
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-xs-4 col-lg-4">
                     <button type="submit" *ngIf="skjemaStatus=='registrer'" [disabled]="!skjema.valid"
-                            class="btn btn-default regknapp"  title="Oppretter en søknad">
+                            class="btn btn-default regknapp" title="Oppretter en søknad">
                         <span class="glyphicon glyphicon-ok"></span>
                     </button>
                     <button type="submit" *ngIf="skjemaStatus=='endre'" title="Endrer søknaden" [disabled]="!skjema.valid"
-                            class="btn btn-primary regknapp" >Bekreft endring
+                            class="btn btn-primary regknapp">
+                        Bekreft endring
                     </button>
-                    <button *ngIf="skjemaStatus=='endre'" 
+                    <button *ngIf="skjemaStatus=='endre'"
                             (click)="tilOversikt()" class="btn btn-default regknapp" title="Til oversikt">
                         Til min oversikt
                     </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <button class="btn btn-default videreknapp" (click)="tilbake()">Endre lånebeløpet her</button>
@@ -124,14 +114,15 @@
         </form>
     </div>
 
-    <!--Hent en persons søknad(er)-->
+    <!--Bruker kan skrive inn personnummer for å hente ut alle sine søknader.
+        Hvis ingen søknader, da er ikke persnummer registrert i database.-->
     <div class="col-md-6 col-md-offset-1" *ngIf="finnMinSoknad">
         <h1>Hent mine søknader</h1>
         <form [formGroup]="skjema" class="register-form" (ngSumbit)="vedSubmit()">
             <div class="row">
                 <div class="col-md-4 col-sm-4 col-lg-4">
                     <label for="belop">Tast inn personnummeret</label>
-                    
+
                     <input class="form-control" name="personnummer" #data
                            formControlName="personnummer" />
                     <p class="alert alert-warning"
@@ -143,15 +134,16 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button [disabled]="!skjema.valid" 
-                            class="btn btn-default regknapp" (click)="hentMineSoknader(data.value)">Hent mine søknader</button>
+                    <button [disabled]="!skjema.valid"
+                            class="btn btn-default regknapp" (click)="hentMineSoknader(data.value)">
+                        Hent mine søknader
+                    </button>
                 </div>
             </div>
         </form>
-
         <button class="btn btn-default videreknapp" (click)="tilbake()">Søk om lån</button>
     </div>
-
+    <!-- Boks for feilmeldinger. -->
     <div *ngIf="status">
         <div class="jumbotron feilbox">
             <div>
@@ -161,6 +153,7 @@
         </div>
     </div>
 
+    <!-- Boks for tilbakemeldinger ved ingen feil. -->
     <div *ngIf="okBoks">
         <div class="jumbotron okbox">
             <div>
@@ -170,6 +163,7 @@
         </div>
     </div>
 
+    <!-- Visning i tabellform alle søknader til en kunde. -->
     <div *ngIf="visListe && !okBoks">
         <table class="table minTabell">
             <tr>

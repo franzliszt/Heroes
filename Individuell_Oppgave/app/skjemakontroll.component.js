@@ -101,7 +101,7 @@ var SkjemaKontroll = (function () {
         }
         this.service.lagreSoknad(soknad).subscribe(function (retur) {
             _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                "Bruk ditt personnummer for å hente din søknadshistorikk.");
+                "Bruk ditt personnummer for å se dine søknader.");
             _this.settStartverdier();
         }, function (error) {
             _this.statusmelding("Klarte ikke å lagre.");
