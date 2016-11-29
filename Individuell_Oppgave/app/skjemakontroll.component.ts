@@ -177,11 +177,12 @@ export class SkjemaKontroll implements OnInit {
                 this.oppdaterSoknadsliste(soknader);
                 this.skjemaStatus = "endre";
                 this.visSkjema = false;
+                this.visKalkulator = false;
                 this.finnMinSoknad = false;
                 this.visListe = true;
             } else {
                 this.ikkePnr = false;
-                this.statusmelding("Du er ikke registrert");
+                this.statusmelding("Du er ikke registrert.");
             }
         },
             error => this.statusmelding("Klarte ikke hente din informasjon."));

@@ -101,7 +101,7 @@
                         Bekreft endring
                     </button>
                     <button *ngIf="skjemaStatus=='endre'"
-                            (click)="tilOversikt()" class="btn btn-default regknapp" title="Til oversikt">
+                            (click)="tilOversikt()" class="btn btn-default tilbakeknapp" title="Til oversikt">
                         Til min oversikt
                     </button>
                 </div>
@@ -134,8 +134,8 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button [disabled]="!skjema.valid"
-                            class="btn btn-default regknapp" (click)="hentMineSoknader(data.value)">
+                    <button type="button" [disabled]="!skjema.valid"
+                            class="btn btn-default regknapp" (click)="hentMineSoknader(data.value)" >
                         Hent mine søknader
                     </button>
                 </div>

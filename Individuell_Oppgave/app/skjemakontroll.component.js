@@ -145,12 +145,13 @@ var SkjemaKontroll = (function () {
                 _this.oppdaterSoknadsliste(soknader);
                 _this.skjemaStatus = "endre";
                 _this.visSkjema = false;
+                _this.visKalkulator = false;
                 _this.finnMinSoknad = false;
                 _this.visListe = true;
             }
             else {
                 _this.ikkePnr = false;
-                _this.statusmelding("Du er ikke registrert");
+                _this.statusmelding("Du er ikke registrert.");
             }
         }, function (error) { return _this.statusmelding("Klarte ikke hente din informasjon."); });
     };

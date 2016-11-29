@@ -1,6 +1,6 @@
 ﻿body, html{
     background-color:#34515E;
-   font-family: 'Open Sans Condensed', sans-serif;
+    font-family: 'Open Sans Condensed', sans-serif;
     font-size: 18px;
 }
 
@@ -10,6 +10,20 @@
 
 .ng-invalid:not(form)  {
   border-left: 8px solid #a94442;
+}
+
+.tilbakeknapp {
+    height: 50px;
+    width: 200px;
+    border-radius: 0px;
+    background-color: #222222;
+    color: #eaeaea;
+    border: none !important;
+}
+
+.tilbakeknapp:hover {
+    background-color: #555555;
+    color: #eaeaea;
 }
 
 
