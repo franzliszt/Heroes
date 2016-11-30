@@ -128,10 +128,10 @@
                        [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                         11 siffer..
                     </p>
-                    
+                    <p *ngIf="tomInput"  class="alert alert-warning">{{melding}}</p>
                 </div>
             </div>
-            <p *ngIf="tomInput" style="width:400px;" class="alert alert-warning">{{melding}}</p>
+            
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     
@@ -187,7 +187,7 @@
                     <td class="text-center">{{soknad.avdragPrMnd}}</td>
                     <td class="text-center">{{soknad.nedbetalingstid}}</td>
                     <td class="text-center">
-                        <button class="btn endreknapp" (click)="hentMinSoknad(soknad)">
+                        <button class="btn endreknapp" (click)="visMinSoknad(soknad)">
                             <span class="glyphicon glyphicon-edit"></span>
                         </button>
                         <button class="btn slettknapp" (click)="slettSoknad(soknad.id)">

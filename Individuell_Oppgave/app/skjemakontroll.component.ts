@@ -98,16 +98,17 @@ export class SkjemaKontroll implements OnInit {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
     }
 
-
-    /* *****Metoder som subscribes***** */
-
     // lagrer en søknad og virket -- ikke ferdig
     lagreSoknad(): void {
         this.laster = true;
         let soknad = this.opprettSoknad();
+        if (soknad.personnummer == "") { this.skjema.patchValue({ personnummer: " " }); }
+        if (soknad.mobiltelefon == "") { this.skjema.patchValue({ mobiltelefon: " " }); }
+        if (soknad.epost == "") { this.skjema.patchValue({ epost: " " }); }
 
-        if (soknad.personnummer == "" || soknad.mobiltelefon == "" ||  soknad.epost == "") {
-            this.melding = "Ingen tomme felt.";
+        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
+            
+            this.melding = "Fyll ut alle feltene.";
             this.tomInput = true;
         } else {
             this.service.lagreSoknad(soknad).subscribe(
@@ -124,7 +125,7 @@ export class SkjemaKontroll implements OnInit {
     }
 
     // Henter en spesifikk søknad som skal endres og fyller ut skjemaet.
-    hentMinSoknad(soknad: Soknad): void {
+    visMinSoknad(soknad: Soknad): void {
         this.skjema.patchValue({ id: soknad.id });
         this.skjema.patchValue({ personnummer: soknad.personnummer });
         this.skjema.patchValue({ mobiltelefon: soknad.mobiltelefon });
@@ -293,8 +294,12 @@ export class SkjemaKontroll implements OnInit {
         this.okBoks = false;
     }
 
-    // Fjerner feilmelding ang tom input eller ikke registrert.
+    // Fjerner feilmelding ved tomme felter eller ikke registrert.
     fjern(): void {
+        if (this.skjema.value.personnummer == " ") { this.skjema.patchValue({ personnummer: "" }); } 
+        if (this.skjema.value.mobiltelefon == " ") { this.skjema.patchValue({ mobiltelefon: "" }); } 
+        if (this.skjema.value.epost == " ") { this.skjema.patchValue({ epost: "" }); } 
+        
         this.tomInput = false;
         this.melding = null;
     }

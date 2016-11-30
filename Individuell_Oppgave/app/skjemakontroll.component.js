@@ -76,18 +76,25 @@ var SkjemaKontroll = (function () {
     SkjemaKontroll.prototype.kalkulerAvdrag = function () {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
     };
-    /* *****Metoder som subscribes***** */
     // lagrer en søknad og virket -- ikke ferdig
     SkjemaKontroll.prototype.lagreSoknad = function () {
         var _this = this;
         this.laster = true;
         var soknad = this.opprettSoknad();
+        if (soknad.personnummer == "") {
+            this.skjema.patchValue({ personnummer: " " });
+        }
+        if (soknad.mobiltelefon == "") {
+            this.skjema.patchValue({ mobiltelefon: " " });
+        }
+        if (soknad.epost == "") {
+            this.skjema.patchValue({ epost: " " });
+        }
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
-            this.melding = "Ingen tomme felt.";
+            this.melding = "Fyll ut alle feltene.";
             this.tomInput = true;
         }
         else {
-            //this.fjern();
             this.service.lagreSoknad(soknad).subscribe(function (retur) {
                 _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
                     "Bruk ditt personnummer for å se dine søknader.");
@@ -99,7 +106,7 @@ var SkjemaKontroll = (function () {
         }
     };
     // Henter en spesifikk søknad som skal endres og fyller ut skjemaet.
-    SkjemaKontroll.prototype.hentMinSoknad = function (soknad) {
+    SkjemaKontroll.prototype.visMinSoknad = function (soknad) {
         this.skjema.patchValue({ id: soknad.id });
         this.skjema.patchValue({ personnummer: soknad.personnummer });
         this.skjema.patchValue({ mobiltelefon: soknad.mobiltelefon });
@@ -199,7 +206,7 @@ var SkjemaKontroll = (function () {
             this.laster = false;
         }
     };
-    // Viser en meldingsboks med informasjon når en operasjon går ikke bra.
+    // Viser en meldingsboks med informasjon når en operasjon ikke bra.
     SkjemaKontroll.prototype.statusmelding = function (inputFeil) {
         this.finnMinSoknad = false;
         this.visSkjema = false;
@@ -254,8 +261,17 @@ var SkjemaKontroll = (function () {
         this.status = false;
         this.okBoks = false;
     };
-    // Fjerner feilmelding.
+    // Fjerner feilmelding ved tomme felter eller ikke registrert.
     SkjemaKontroll.prototype.fjern = function () {
+        if (this.skjema.value.personnummer == " ") {
+            this.skjema.patchValue({ personnummer: "" });
+        }
+        if (this.skjema.value.mobiltelefon == " ") {
+            this.skjema.patchValue({ mobiltelefon: "" });
+        }
+        if (this.skjema.value.epost == " ") {
+            this.skjema.patchValue({ epost: "" });
+        }
         this.tomInput = false;
         this.melding = null;
     };
