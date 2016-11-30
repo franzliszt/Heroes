@@ -28,7 +28,7 @@ export class SkjemaKontroll implements OnInit {
     status: boolean;
     okBoks: boolean;
     visListe: boolean;
-    ikkePnr: boolean;
+    tomInput: boolean;
 
     // for tilbakemeldinger
     melding: string;
@@ -71,7 +71,9 @@ export class SkjemaKontroll implements OnInit {
         }
     }
 
+    // Viser vinduet for å skrive inn personnummer.
     visMinLaneSoknad(): void {
+        this.fjern();
         this.nullstill();
         this.settStartverdier();
         this.melding = "";
@@ -91,9 +93,11 @@ export class SkjemaKontroll implements OnInit {
         this.visKalkulator = false;
     }
 
+    // Oppdaterer avdrag hver gang slidere endres.
     kalkulerAvdrag(): void {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
     }
+
 
     /* *****Metoder som subscribes***** */
 
@@ -101,13 +105,13 @@ export class SkjemaKontroll implements OnInit {
     lagreSoknad(): void {
         this.laster = true;
         let soknad = this.opprettSoknad();
-        if (soknad.personnummer == "" ||
-            soknad.mobiltelefon == "" ||
-            soknad.epost == "") {
-                this.skjema.patchValue({ personnummer: "" });
-                this.melding = "Vennligst kontroller utfylling";
+
+        if (soknad.personnummer == "" || soknad.mobiltelefon == "" ||  soknad.epost == "") {
+            this.skjema.patchValue({ personnummer: "" });
+            this.melding = "Ingen tomme felt.";
+            this.tomInput = true;
         } else {
-            this.melding = "";
+            this.fjern();
             this.service.lagreSoknad(soknad).subscribe(
                 retur => {
                     this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
@@ -140,8 +144,10 @@ export class SkjemaKontroll implements OnInit {
 
     // Henter alle søknader tilhørende en bruker.
     hentMineSoknader(pnr: string): void {
+        
         if (pnr == "") {
             this.melding = "Vennnligst fyll ut.";
+            this.tomInput = true;
         } else {
             this.service.hentMineSoknader(pnr).subscribe(soknader => {
                 if (soknader[0] != null) {
@@ -152,7 +158,8 @@ export class SkjemaKontroll implements OnInit {
                     this.finnMinSoknad = false;
                     this.visListe = true;
                 } else {
-                    this.ikkePnr = false;
+                    this.tomInput = true;
+                    this.skjema.patchValue({ personnummer: "" });
                     this.melding = "Du er ikke registrert.";
                 }
             },
@@ -163,8 +170,10 @@ export class SkjemaKontroll implements OnInit {
     // Endrer søknad og gjør et kall for å hente oppdatert søknadsliste for en bruker.
     endreMinSoknad(): void {
         if (this.sjekkInput()) {
+            this.tomInput = true;
             this.melding = "Ingen tomme felter.";
         } else {
+            this.fjern();
             let soknad = this.opprettSoknad();
             soknad.id = this.skjema.value.id;
             this.service.endreSoknad(soknad)
@@ -291,6 +300,7 @@ export class SkjemaKontroll implements OnInit {
 
     // Fjerner feilmelding.
     fjern(): void {
-        this.melding = "";
+        this.tomInput = false;
+        this.melding = null;
     }
 }

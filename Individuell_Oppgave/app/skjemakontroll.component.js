@@ -50,7 +50,9 @@ var SkjemaKontroll = (function () {
                 "\nVennligst prøv igjen litt senere");
         }
     };
+    // Viser vinduet for å skrive inn personnummer.
     SkjemaKontroll.prototype.visMinLaneSoknad = function () {
+        this.fjern();
         this.nullstill();
         this.settStartverdier();
         this.melding = "";
@@ -70,6 +72,7 @@ var SkjemaKontroll = (function () {
         this.visSkjema = true;
         this.visKalkulator = false;
     };
+    // Oppdaterer avdrag hver gang slidere endres.
     SkjemaKontroll.prototype.kalkulerAvdrag = function () {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
     };
@@ -79,14 +82,13 @@ var SkjemaKontroll = (function () {
         var _this = this;
         this.laster = true;
         var soknad = this.opprettSoknad();
-        if (soknad.personnummer == "" ||
-            soknad.mobiltelefon == "" ||
-            soknad.epost == "") {
+        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
             this.skjema.patchValue({ personnummer: "" });
-            this.melding = "Vennligst kontroller utfylling";
+            this.melding = "Ingen tomme felt.";
+            this.tomInput = true;
         }
         else {
-            this.melding = "";
+            this.fjern();
             this.service.lagreSoknad(soknad).subscribe(function (retur) {
                 _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
                     "Bruk ditt personnummer for å se dine søknader.");
@@ -117,6 +119,7 @@ var SkjemaKontroll = (function () {
         var _this = this;
         if (pnr == "") {
             this.melding = "Vennnligst fyll ut.";
+            this.tomInput = true;
         }
         else {
             this.service.hentMineSoknader(pnr).subscribe(function (soknader) {
@@ -129,7 +132,8 @@ var SkjemaKontroll = (function () {
                     _this.visListe = true;
                 }
                 else {
-                    _this.ikkePnr = false;
+                    _this.tomInput = true;
+                    _this.skjema.patchValue({ personnummer: "" });
                     _this.melding = "Du er ikke registrert.";
                 }
             }, function (error) { return _this.statusmelding("Klarte ikke hente din informasjon."); });
@@ -139,9 +143,11 @@ var SkjemaKontroll = (function () {
     SkjemaKontroll.prototype.endreMinSoknad = function () {
         var _this = this;
         if (this.sjekkInput()) {
+            this.tomInput = true;
             this.melding = "Ingen tomme felter.";
         }
         else {
+            this.fjern();
             var soknad_2 = this.opprettSoknad();
             soknad_2.id = this.skjema.value.id;
             this.service.endreSoknad(soknad_2)
@@ -254,7 +260,8 @@ var SkjemaKontroll = (function () {
     };
     // Fjerner feilmelding.
     SkjemaKontroll.prototype.fjern = function () {
-        this.melding = "";
+        this.tomInput = false;
+        this.melding = null;
     };
     SkjemaKontroll = __decorate([
         core_1.Component({

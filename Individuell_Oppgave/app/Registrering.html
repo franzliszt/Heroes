@@ -88,7 +88,7 @@
             <input type="hidden" class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
             <input type="hidden" class="form-control" name="belop" formControlName="belop" placeholder="8 siffer" />
             <input type="hidden" class="form-control" name="avdrag" formControlName="avdrag" placeholder="8 siffer" />
-            <p id="skjemafeil">{{melding}}</p>
+            <p *ngIf="tomInput" id="skjemafeil" >{{melding}}</p>
             <p style="color:#eaeaea;">Nedbetaling over {{tid}} år. Avdrag {{avdrag}} kr/mnd.</p>
             <hr />
             <div class="row">
@@ -101,7 +101,7 @@
                             class="btn btn-primary regknapp">
                         Bekreft endring
                     </button>
-                    <button *ngIf="skjemaStatus=='endre'"
+                    <button *ngIf="skjemaStatus=='endre'" 
                             (click)="tilOversikt()" class="btn btn-default tilbakeknapp" title="Til oversikt">
                         Til min oversikt
                     </button>
@@ -130,12 +130,13 @@
                        [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                         11 siffer..
                     </p>
-                    <p *ngIf="ikkePnr" class="alert alert-warning">Du er ikke registrert</p>
+                    
                 </div>
             </div>
+            <p *ngIf="tomInput" style="width:400px;" class="alert alert-warning">{{melding}}</p>
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <p id="skjemafeil">{{melding}}</p>
+                    
                     <button type="button" [disabled]="!skjema.valid"
                             class="btn btn-default regknapp" (click)="hentMineSoknader(data.value)" >
                         Hent mine søknader
