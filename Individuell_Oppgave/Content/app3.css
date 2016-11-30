@@ -385,3 +385,13 @@ input[type=range]:focus::-ms-fill-upper {
     color: #eaeaea;
     margin-bottom: 50px;
 }
+
+#skjemafeil {
+    color: #9F6000;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2em;
+}
+
+.feilInput {
+    border: 1px solid #9F6000;
+}

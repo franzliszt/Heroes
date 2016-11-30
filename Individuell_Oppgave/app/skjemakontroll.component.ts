@@ -60,25 +60,17 @@ export class SkjemaKontroll implements OnInit {
         this.visKalkulator = true;
     }
 
-    // Nullstiller skjema.
-    nullstill(): void {
-        this.skjema.patchValue({ id: "" });
-        this.skjema.patchValue({ personnummer: "" });
-        this.skjema.patchValue({ mobiltelefon: "" });
-        this.skjema.patchValue({ epost: "" });
-        this.skjema.patchValue({ belop: "" });
-        this.skjema.patchValue({ nedbetalingstid: "" });
-        this.skjema.patchValue({ avdrag: "" });
+    vedSubmit(): void {
+        if (this.skjemaStatus == "registrer") {
+            this.lagreSoknad();
+        } else if (this.skjemaStatus == "endre") {
+            this.endreMinSoknad();
+        } else {
+            this.statusmelding("En alvorlig feil har oppstått." +
+                "\nVennligst prøv igjen litt senere");
+        }
     }
 
-    // Startverdier på slidere.
-    private settStartverdier(): void {
-        this.belop = 150000;
-        this.tid = 5;
-        this.kalkulerAvdrag();
-    }
-
-    // ikke ferdig
     visMinLaneSoknad(): void {
         this.nullstill();
         this.settStartverdier();
@@ -92,6 +84,7 @@ export class SkjemaKontroll implements OnInit {
 
     // Viser søknadsskjemaet.
     tilSkjema(): void {
+        this.fjern();
         if (this.skjemaStatus == "registrer") { this.nullstill(); }
         this.finnMinSoknad = false;
         this.visSkjema = true;
@@ -102,55 +95,33 @@ export class SkjemaKontroll implements OnInit {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
     }
 
-    vedSubmit() {
-        if (this.skjemaStatus == "registrer") {
-            this.lagreSoknad();
-        } else if (this.skjemaStatus == "endre") {
-            this.endreMinSoknad();
-        } else {
-            this.statusmelding("En alvorlig feil har oppstått.\nVennligst prøv igjen litt senere");
-        }
-    }
-
-
     /* *****Metoder som subscribes***** */
 
     // lagrer en søknad og virket -- ikke ferdig
     lagreSoknad(): void {
         this.laster = true;
         let soknad = this.opprettSoknad();
-        if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "" ||
-            soknad.belop == null || soknad.nedbetalingstid == null) {
-            this.skjema.patchValue({ personnummer: "" });
-            return;
+        if (soknad.personnummer == "" ||
+            soknad.mobiltelefon == "" ||
+            soknad.epost == "") {
+                this.skjema.patchValue({ personnummer: "" });
+                this.melding = "Vennligst kontroller utfylling";
+        } else {
+            this.melding = "";
+            this.service.lagreSoknad(soknad).subscribe(
+                retur => {
+                    this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
+                        "Bruk ditt personnummer for å se dine søknader.");
+                    this.settStartverdier();
+                },
+                error => {
+                    this.statusmelding("Klarte ikke å lagre.");
+                });
+            this.laster = false;
         }
-        this.service.lagreSoknad(soknad).subscribe(
-            retur => {
-                this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                    "Bruk ditt personnummer for å se dine søknader.");
-                this.settStartverdier();
-            },
-            error => {
-                this.statusmelding("Klarte ikke å lagre.");
-            });
-        this.laster = false;
-        
-    }
-    
-
-    // Hjelpemetode for å hente data fra skjemaet og oppretter en søknad.
-    private opprettSoknad(): Soknad {
-        let soknad = new Soknad();
-        soknad.personnummer = this.skjema.value.personnummer;
-        soknad.mobiltelefon = this.skjema.value.mobiltelefon;
-        soknad.epost = this.skjema.value.epost;
-        soknad.belop = this.belop;
-        soknad.nedbetalingstid = this.tid;
-        soknad.avdragPrMnd = this.avdrag;
-        return soknad;
     }
 
-    // Henter en spesifikk søknad som skal endres. 
+    // Henter en spesifikk søknad som skal endres og fyller ut skjemaet.
     hentMinSoknad(soknad: Soknad): void {
         this.skjema.patchValue({ id: soknad.id });
         this.skjema.patchValue({ personnummer: soknad.personnummer });
@@ -170,45 +141,41 @@ export class SkjemaKontroll implements OnInit {
     // Henter alle søknader tilhørende en bruker.
     hentMineSoknader(pnr: string): void {
         if (pnr == "") {
-            return;
-        }
-        this.service.hentMineSoknader(pnr).subscribe(soknader => {
-            if (soknader[0] != null) {
-                this.oppdaterSoknadsliste(soknader);
-                this.skjemaStatus = "endre";
-                this.visSkjema = false;
-                this.visKalkulator = false;
-                this.finnMinSoknad = false;
-                this.visListe = true;
-            } else {
-                this.ikkePnr = false;
-                this.statusmelding("Du er ikke registrert.");
-            }
-        },
-            error => this.statusmelding("Klarte ikke hente din informasjon."));
-    }
-
-    // Oppdaterer et array av søknader.
-    private oppdaterSoknadsliste(soknader: any): void {
-        this.alleSoknader = [];
-        for (let soknad of soknader) {
-            this.alleSoknader.push(soknad);
-            this.laster = false;
+            this.melding = "Vennnligst fyll ut.";
+        } else {
+            this.service.hentMineSoknader(pnr).subscribe(soknader => {
+                if (soknader[0] != null) {
+                    this.oppdaterSoknadsliste(soknader);
+                    this.skjemaStatus = "endre";
+                    this.visSkjema = false;
+                    this.visKalkulator = false;
+                    this.finnMinSoknad = false;
+                    this.visListe = true;
+                } else {
+                    this.ikkePnr = false;
+                    this.melding = "Du er ikke registrert.";
+                }
+            },
+                error => this.statusmelding("Klarte ikke hente din informasjon."));
         }
     }
 
     // Endrer søknad og gjør et kall for å hente oppdatert søknadsliste for en bruker.
     endreMinSoknad(): void {
-        let soknad = this.opprettSoknad();
-        soknad.id = this.skjema.value.id;
-        this.service.endreSoknad(soknad)
-            .subscribe(
-            retur => {
-                this.hentMineSoknader(soknad.personnummer);
-            },
-            error => {
-                this.statusmelding("Endring av søknad mislyktes.");
-            });
+        if (this.sjekkInput()) {
+            this.melding = "Ingen tomme felter.";
+        } else {
+            let soknad = this.opprettSoknad();
+            soknad.id = this.skjema.value.id;
+            this.service.endreSoknad(soknad)
+                .subscribe(
+                retur => {
+                    this.hentMineSoknader(soknad.personnummer);
+                },
+                error => {
+                    this.statusmelding("Endring av søknad mislyktes.");
+                });
+        }
     }
 
     // Sletter en søknad og oppdaterer visningen av søkerens søknader.
@@ -229,12 +196,32 @@ export class SkjemaKontroll implements OnInit {
     }
 
 
-    // Sender til lånekalkulatoren.
-    tilbake(): void {
-        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
-        this.finnMinSoknad = false;
-        this.status = false;
-        this.okBoks = false;
+    // Startverdier på slidere.
+    private settStartverdier(): void {
+        this.belop = 150000;
+        this.tid = 5;
+        this.kalkulerAvdrag();
+    }
+
+    // Hjelpemetode for å hente data fra skjemaet og oppretter en søknad.
+    private opprettSoknad(): Soknad {
+        let soknad = new Soknad();
+        soknad.personnummer = this.skjema.value.personnummer;
+        soknad.mobiltelefon = this.skjema.value.mobiltelefon;
+        soknad.epost = this.skjema.value.epost;
+        soknad.belop = this.belop;
+        soknad.nedbetalingstid = this.tid;
+        soknad.avdragPrMnd = this.avdrag;
+        return soknad;
+    }
+
+    // Oppdaterer et array av søknader.
+    private oppdaterSoknadsliste(soknader: any): void {
+        this.alleSoknader = [];
+        for (let soknad of soknader) {
+            this.alleSoknader.push(soknad);
+            this.laster = false;
+        }
     }
 
     // Viser en meldingsboks med informasjon når en operasjon går ikke bra.
@@ -257,6 +244,26 @@ export class SkjemaKontroll implements OnInit {
         this.nullstill();
     }
 
+    // Nullstiller skjema.
+    private nullstill(): void {
+        this.skjema.patchValue({ id: "" });
+        this.skjema.patchValue({ personnummer: "" });
+        this.skjema.patchValue({ mobiltelefon: "" });
+        this.skjema.patchValue({ epost: "" });
+        this.skjema.patchValue({ belop: "" });
+        this.skjema.patchValue({ nedbetalingstid: "" });
+        this.skjema.patchValue({ avdrag: "" });
+    }
+
+    // Sjekker om noen felter er tomme.
+    private sjekkInput(): boolean {
+        if (this.skjema.value.personnummer == "" ||
+            this.skjema.value.mobiltelefon == "" ||
+            this.skjema.value.epost == "") {
+            return true;
+        }
+    }
+
     // Avslutter visning av alle søknader og endringsfunksjonalitet og returnerer til lånekalkulatoren.
     avbryt(): void {
         this.skjemaStatus = "registrer";
@@ -272,5 +279,18 @@ export class SkjemaKontroll implements OnInit {
         this.visSkjema = false;
         this.visKalkulator = false;
         this.visListe = true;
+    }
+
+    // Sender til lånekalkulatoren.
+    tilbake(): void {
+        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
+        this.finnMinSoknad = false;
+        this.status = false;
+        this.okBoks = false;
+    }
+
+    // Fjerner feilmelding.
+    fjern(): void {
+        this.melding = "";
     }
 }

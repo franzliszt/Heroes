@@ -68,19 +68,19 @@
         <form [formGroup]="skjema" class="register-form" (ngSubmit)="vedSubmit()">
             <input class="form-control" formControlName="id" type="hidden" #id />
             <label class="inputPersonalia">Personnummer</label>
-            <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" />
+            <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" (click)="fjern()"/>
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                 Kun 11 siffer!
             </p>
             <label class="inputPersonalia">Mobiltelefon</label>
-            <input class="form-control" name="mobiltelefon" formControlName="mobiltelefon" placeholder="8 siffer" />
+            <input class="form-control" name="mobiltelefon" formControlName="mobiltelefon" placeholder="8 siffer" (click)="fjern()"/>
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.mobiltelefon.valid || (skjema.controls.mobiltelefon.pristine && !submitted)">
                 Kun 8 siffer!
             </p>
             <label class="inputPersonalia">Epost</label>
-            <input class="form-control" name="epost" formControlName="epost" placeholder="Din epost" />
+            <input class="form-control" name="epost" formControlName="epost" placeholder="Din epost" (click)="fjern()"/>
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
                 Ugyldig epost!
@@ -88,6 +88,7 @@
             <input type="hidden" class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
             <input type="hidden" class="form-control" name="belop" formControlName="belop" placeholder="8 siffer" />
             <input type="hidden" class="form-control" name="avdrag" formControlName="avdrag" placeholder="8 siffer" />
+            <p id="skjemafeil">{{melding}}</p>
             <p style="color:#eaeaea;">Nedbetaling over {{tid}} år. Avdrag {{avdrag}} kr/mnd.</p>
             <hr />
             <div class="row">
@@ -124,7 +125,7 @@
                     <label for="belop">Tast inn personnummeret</label>
 
                     <input class="form-control" name="personnummer" #data
-                           formControlName="personnummer" />
+                           formControlName="personnummer" (click)="fjern()" /> 
                     <p class="alert alert-warning"
                        [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                         11 siffer..
@@ -134,6 +135,7 @@
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+                    <p id="skjemafeil">{{melding}}</p>
                     <button type="button" [disabled]="!skjema.valid"
                             class="btn btn-default regknapp" (click)="hentMineSoknader(data.value)" >
                         Hent mine søknader
