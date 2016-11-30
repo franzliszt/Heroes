@@ -87,7 +87,7 @@ var SkjemaKontroll = (function () {
             this.tomInput = true;
         }
         else {
-            this.fjern();
+            //this.fjern();
             this.service.lagreSoknad(soknad).subscribe(function (retur) {
                 _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
                     "Bruk ditt personnummer for å se dine søknader.");

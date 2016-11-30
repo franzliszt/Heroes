@@ -110,7 +110,6 @@ export class SkjemaKontroll implements OnInit {
             this.melding = "Ingen tomme felt.";
             this.tomInput = true;
         } else {
-            this.fjern();
             this.service.lagreSoknad(soknad).subscribe(
                 retur => {
                     this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
@@ -143,7 +142,6 @@ export class SkjemaKontroll implements OnInit {
 
     // Henter alle søknader tilhørende en bruker.
     hentMineSoknader(pnr: string): void {
-        
         if (pnr == "") {
             this.melding = "Vennnligst fyll ut.";
             this.tomInput = true;
@@ -232,7 +230,7 @@ export class SkjemaKontroll implements OnInit {
         }
     }
 
-    // Viser en meldingsboks med informasjon når en operasjon går ikke bra.
+    // Viser en meldingsboks med informasjon når en operasjon ikke bra.
     private statusmelding(inputFeil: string): void {
         this.finnMinSoknad = false;
         this.visSkjema = false;
@@ -295,7 +293,7 @@ export class SkjemaKontroll implements OnInit {
         this.okBoks = false;
     }
 
-    // Fjerner feilmelding.
+    // Fjerner feilmelding ang tom input eller ikke registrert.
     fjern(): void {
         this.tomInput = false;
         this.melding = null;
