@@ -83,7 +83,6 @@ var SkjemaKontroll = (function () {
         this.laster = true;
         var soknad = this.opprettSoknad();
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
-            this.skjema.patchValue({ personnummer: "" });
             this.melding = "Ingen tomme felt.";
             this.tomInput = true;
         }
