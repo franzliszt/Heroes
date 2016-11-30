@@ -107,8 +107,6 @@
                     </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                </div>
-                <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
                     <button class="btn btn-default videreknapp" (click)="tilbake()">Endre lånebeløpet her</button>
                 </div>
             </div>
@@ -170,25 +168,25 @@
     <div *ngIf="visListe && !okBoks">
         <table class="table minTabell">
             <tr>
-                <th>Søknadsnummer</th>
-                <th>Lånebeløp</th>
-                <th>Nedbetalingstid</th>
-                <th>Avdrag pr måned</th>
-                <th>Epost</th>
-                <th>Mobiltelefon</th>
-                <th>Personnummer</th>
+                <th class="text-center">Søknadsnummer</th>
+                <th class="text-center">Personnummer</th>
+                <th class="text-center">Epost</th>
+                <th class="text-center">Mobiltelefon</th>
+                <th class="text-center">Lånebeløp</th>
+                <th class="text-center">Avdrag pr måned</th>
+                <th class="text-center">Nedbetalingstid</th>
                 <th></th>
             </tr>
             <tbody *ngFor="let soknad of alleSoknader">
                 <tr>
-                    <td>{{soknad.id}}</td>
-                    <td>{{soknad.belop}}</td>
-                    <td>{{soknad.nedbetalingstid}}</td>
-                    <td>{{soknad.avdragPrMnd}}</td>
-                    <td>{{soknad.epost}}</td>
-                    <td>{{soknad.mobiltelefon}}</td>
-                    <td>{{soknad.personnummer}}</td>
-                    <td>
+                    <td class="text-center">{{soknad.id}}</td>
+                    <td class="text-center">{{soknad.personnummer}}</td>
+                    <td class="text-center">{{soknad.epost}}</td>
+                    <td class="text-center">{{soknad.mobiltelefon}}</td>
+                    <td class="text-center">{{soknad.belop}}</td>
+                    <td class="text-center">{{soknad.avdragPrMnd}}</td>
+                    <td class="text-center">{{soknad.nedbetalingstid}}</td>
+                    <td class="text-center">
                         <button class="btn endreknapp" (click)="hentMinSoknad(soknad)">
                             <span class="glyphicon glyphicon-edit"></span>
                         </button>

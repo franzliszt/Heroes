@@ -266,11 +266,9 @@ export class SkjemaKontroll implements OnInit {
 
     // Sjekker om noen felter er tomme.
     private sjekkInput(): boolean {
-        if (this.skjema.value.personnummer == "" ||
-            this.skjema.value.mobiltelefon == "" ||
-            this.skjema.value.epost == "") {
-            return true;
-        }
+        return this.skjema.value.personnummer == "" ||  this.skjema.value.mobiltelefon == "" ||
+            this.skjema.value.epost == "";
+        
     }
 
     // Avslutter visning av alle søknader og endringsfunksjonalitet og returnerer til lånekalkulatoren.

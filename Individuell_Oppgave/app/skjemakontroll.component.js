@@ -230,11 +230,8 @@ var SkjemaKontroll = (function () {
     };
     // Sjekker om noen felter er tomme.
     SkjemaKontroll.prototype.sjekkInput = function () {
-        if (this.skjema.value.personnummer == "" ||
-            this.skjema.value.mobiltelefon == "" ||
-            this.skjema.value.epost == "") {
-            return true;
-        }
+        return this.skjema.value.personnummer == "" || this.skjema.value.mobiltelefon == "" ||
+            this.skjema.value.epost == "";
     };
     // Avslutter visning av alle søknader og endringsfunksjonalitet og returnerer til lånekalkulatoren.
     SkjemaKontroll.prototype.avbryt = function () {
