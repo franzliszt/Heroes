@@ -24,8 +24,8 @@ var SkjemaKontroll = (function () {
             personnummer: ["", forms_1.Validators.pattern("[0-9]{11}")],
             mobiltelefon: ["", forms_1.Validators.pattern("[0-9]{8}")],
             epost: ["", forms_1.Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")],
-            belop: ["", forms_1.Validators.pattern("[0-9]{4,7}")],
-            nedbetalingstid: ["", forms_1.Validators.pattern("[0-9]{1,2}")],
+            belop: [""],
+            nedbetalingstid: [""],
             avdrag: [""]
         });
     }
@@ -46,8 +46,8 @@ var SkjemaKontroll = (function () {
             this.endreMinSoknad();
         }
         else {
-            this.statusmelding("En alvorlig feil har oppstått." +
-                "\nVennligst prøv igjen litt senere");
+            this.statusmelding("En feil har oppstått." +
+                "\nVennligst prøv igjen senere");
         }
     };
     // Viser vinduet for å skrive inn personnummer.
@@ -76,14 +76,11 @@ var SkjemaKontroll = (function () {
     SkjemaKontroll.prototype.kalkulerAvdrag = function () {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
     };
-    // lagrer en søknad og virket -- ikke ferdig
+    // Lagrer en søknad
     SkjemaKontroll.prototype.lagreSoknad = function () {
         var _this = this;
         this.laster = true;
         var soknad = this.opprettSoknad();
-        //if (soknad.personnummer == "") { this.skjema.patchValue({ personnummer: " " }); }
-        //if (soknad.mobiltelefon == "") { this.skjema.patchValue({ mobiltelefon: " " }); }
-        //if (soknad.epost == "") { this.skjema.patchValue({ epost: " " }); }
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
             this.melding = "Fyll ut alle feltene.";
             this.tomInput = true;
@@ -105,7 +102,7 @@ var SkjemaKontroll = (function () {
         this.skjema.patchValue({ personnummer: soknad.personnummer });
         this.skjema.patchValue({ mobiltelefon: soknad.mobiltelefon });
         this.skjema.patchValue({ epost: soknad.epost });
-        this.skjema.patchValue({ belop: soknad.belop });
+        //this.skjema.patchValue({ belop: soknad.belop });
         this.belop = soknad.belop;
         this.tid = soknad.nedbetalingstid;
         this.avdrag = soknad.avdragPrMnd;
@@ -163,7 +160,7 @@ var SkjemaKontroll = (function () {
         var _this = this;
         this.service.slettSoknad(id)
             .subscribe(function (retur) {
-            if (retur) {
+            if (retur[0]) {
                 _this.oppdaterSoknadsliste(retur);
                 _this.visSkjema = false;
                 _this.finnMinSoknad = false;
@@ -204,6 +201,7 @@ var SkjemaKontroll = (function () {
     SkjemaKontroll.prototype.statusmelding = function (inputFeil) {
         this.finnMinSoknad = false;
         this.visSkjema = false;
+        this.visListe = false;
         this.visKalkulator = false;
         this.status = true;
         this.melding = inputFeil;
@@ -224,9 +222,9 @@ var SkjemaKontroll = (function () {
         this.skjema.patchValue({ personnummer: "" });
         this.skjema.patchValue({ mobiltelefon: "" });
         this.skjema.patchValue({ epost: "" });
-        this.skjema.patchValue({ belop: "" });
-        this.skjema.patchValue({ nedbetalingstid: "" });
-        this.skjema.patchValue({ avdrag: "" });
+        //this.skjema.patchValue({ belop: "" });
+        //this.skjema.patchValue({ nedbetalingstid: "" });
+        //this.skjema.patchValue({ avdrag: "" });
     };
     // Sjekker om noen felter er tomme.
     SkjemaKontroll.prototype.sjekkInput = function () {
@@ -250,22 +248,23 @@ var SkjemaKontroll = (function () {
     };
     // Sender til lånekalkulatoren.
     SkjemaKontroll.prototype.tilbake = function () {
-        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
+        this.fjern();
+        this.skjemaStatus == "endre" ? this.visListe = true : this.visKalkulator;
+        this.visListe ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
         this.finnMinSoknad = false;
         this.status = false;
         this.okBoks = false;
     };
+    SkjemaKontroll.prototype.tilKalkulator = function () {
+        this.visListe = false;
+        this.visSkjema = false;
+        this.visKalkulator = true;
+    };
     // Fjerner feilmelding ved tomme felter eller ikke registrert.
     SkjemaKontroll.prototype.fjern = function () {
-        if (this.skjema.value.personnummer == " ") {
-            this.skjema.patchValue({ personnummer: "" });
-        }
-        if (this.skjema.value.mobiltelefon == " ") {
-            this.skjema.patchValue({ mobiltelefon: "" });
-        }
-        if (this.skjema.value.epost == " ") {
-            this.skjema.patchValue({ epost: "" });
-        }
+        //if (this.skjema.value.personnummer == " ") { this.skjema.patchValue({ personnummer: "" }); } 
+        //if (this.skjema.value.mobiltelefon == " ") { this.skjema.patchValue({ mobiltelefon: "" }); } 
+        //if (this.skjema.value.epost == " ") { this.skjema.patchValue({ epost: "" }); } 
         this.tomInput = false;
         this.melding = null;
     };

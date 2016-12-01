@@ -85,9 +85,9 @@
                [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
                 Ugyldig epost!
             </p>
-            <input type="hidden" class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
+            <!--<input type="hidden" class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
             <input type="hidden" class="form-control" name="belop" formControlName="belop" placeholder="8 siffer" />
-            <input type="hidden" class="form-control" name="avdrag" formControlName="avdrag" placeholder="8 siffer" />
+            <input type="hidden" class="form-control" name="avdrag" formControlName="avdrag" placeholder="8 siffer" />-->
             <p *ngIf="tomInput" id="skjemafeil" >{{melding}}</p>
             <p style="color:#eaeaea;">Nedbetaling over {{tid}} år. Avdrag {{avdrag}} kr/mnd.</p>
             <hr />
@@ -107,7 +107,7 @@
                     </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button class="btn btn-default videreknapp" (click)="tilbake()">Endre lånebeløpet her</button>
+                    <button class="btn btn-default videreknapp" (click)="tilKalkulator()">Endre lånebeløpet her</button>
                 </div>
             </div>
         </form>
@@ -142,7 +142,7 @@
                 </div>
             </div>
         </form>
-        <button class="btn btn-default videreknapp" (click)="tilbake()">Søk om lån</button>
+        <button class="btn btn-default videreknapp" (click)="tilKalkulator()">Søk om lån</button>
     </div>
     <!-- Boks for feilmeldinger. -->
     <div *ngIf="status">

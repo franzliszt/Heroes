@@ -12,16 +12,15 @@ import { SkjemaService } from "./skjemaservice";
 })
 
 export class SkjemaKontroll implements OnInit {
-    // startverdier på slider
+    // For sliders
     belop: number;
     tid: number;
-    // variabel som brukes til å vise månedlige avdrag
+    // Variabel som brukes til å vise månedlige avdrag
     avdrag: number;
 
     // Flagg for å bestemme visninger i html.
     visSkjema: boolean;
     visKalkulator: boolean;
-    visning: boolean;
     laster: boolean;
     skjemaStatus: string;
     finnMinSoknad: boolean;
@@ -44,8 +43,8 @@ export class SkjemaKontroll implements OnInit {
             personnummer: ["", Validators.pattern("[0-9]{11}")],
             mobiltelefon: ["", Validators.pattern("[0-9]{8}")],
             epost: ["", Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")],
-            belop: ["", Validators.pattern("[0-9]{4,7}")],
-            nedbetalingstid: ["", Validators.pattern("[0-9]{1,2}")],
+            belop: [""],
+            nedbetalingstid: [""],
             avdrag: [""]
         });
     }
@@ -66,8 +65,8 @@ export class SkjemaKontroll implements OnInit {
         } else if (this.skjemaStatus == "endre") {
             this.endreMinSoknad();
         } else {
-            this.statusmelding("En alvorlig feil har oppstått." +
-                "\nVennligst prøv igjen litt senere");
+            this.statusmelding("En feil har oppstått." +
+                "\nVennligst prøv igjen senere");
         }
     }
 
@@ -88,6 +87,7 @@ export class SkjemaKontroll implements OnInit {
     tilSkjema(): void {
         this.fjern();
         if (this.skjemaStatus == "registrer") { this.nullstill(); }
+
         this.finnMinSoknad = false;
         this.visSkjema = true;
         this.visKalkulator = false;
@@ -98,16 +98,12 @@ export class SkjemaKontroll implements OnInit {
         this.avdrag = this.kalkulator.beregn(this.belop, this.tid);
     }
 
-    // lagrer en søknad og virket -- ikke ferdig
+    // Lagrer en søknad
     lagreSoknad(): void {
         this.laster = true;
         let soknad = this.opprettSoknad();
-        //if (soknad.personnummer == "") { this.skjema.patchValue({ personnummer: " " }); }
-        //if (soknad.mobiltelefon == "") { this.skjema.patchValue({ mobiltelefon: " " }); }
-        //if (soknad.epost == "") { this.skjema.patchValue({ epost: " " }); }
 
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
-            
             this.melding = "Fyll ut alle feltene.";
             this.tomInput = true;
         } else {
@@ -130,7 +126,7 @@ export class SkjemaKontroll implements OnInit {
         this.skjema.patchValue({ personnummer: soknad.personnummer });
         this.skjema.patchValue({ mobiltelefon: soknad.mobiltelefon });
         this.skjema.patchValue({ epost: soknad.epost });
-        this.skjema.patchValue({ belop: soknad.belop });
+        //this.skjema.patchValue({ belop: soknad.belop });
         this.belop = soknad.belop;
         this.tid = soknad.nedbetalingstid;
         this.avdrag = soknad.avdragPrMnd;
@@ -190,7 +186,7 @@ export class SkjemaKontroll implements OnInit {
         this.service.slettSoknad(id)
             .subscribe(
             retur => {
-                if (retur) {
+                if (retur[0]) {
                     this.oppdaterSoknadsliste(retur);
                     this.visSkjema = false;
                     this.finnMinSoknad = false;
@@ -235,6 +231,7 @@ export class SkjemaKontroll implements OnInit {
     private statusmelding(inputFeil: string): void {
         this.finnMinSoknad = false;
         this.visSkjema = false;
+        this.visListe = false;
         this.visKalkulator = false;
         this.status = true;
         this.melding = inputFeil;
@@ -257,9 +254,9 @@ export class SkjemaKontroll implements OnInit {
         this.skjema.patchValue({ personnummer: "" });
         this.skjema.patchValue({ mobiltelefon: "" });
         this.skjema.patchValue({ epost: "" });
-        this.skjema.patchValue({ belop: "" });
-        this.skjema.patchValue({ nedbetalingstid: "" });
-        this.skjema.patchValue({ avdrag: "" });
+        //this.skjema.patchValue({ belop: "" });
+        //this.skjema.patchValue({ nedbetalingstid: "" });
+        //this.skjema.patchValue({ avdrag: "" });
     }
 
     // Sjekker om noen felter er tomme.
@@ -280,7 +277,7 @@ export class SkjemaKontroll implements OnInit {
     }
 
     // Går til oversikten over alle søknader registrert på en kunde.
-    tilOversikt(): void{
+    tilOversikt(): void {
         this.visSkjema = false;
         this.visKalkulator = false;
         this.visListe = true;
@@ -288,17 +285,25 @@ export class SkjemaKontroll implements OnInit {
 
     // Sender til lånekalkulatoren.
     tilbake(): void {
-        (this.visListe) ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
+        this.fjern();
+        this.skjemaStatus == "endre" ? this.visListe = true : this.visKalkulator;
+        this.visListe ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
         this.finnMinSoknad = false;
         this.status = false;
         this.okBoks = false;
     }
 
+    tilKalkulator(): void {
+        this.visListe = false;
+        this.visSkjema = false;
+        this.visKalkulator = true;
+    }
+
     // Fjerner feilmelding ved tomme felter eller ikke registrert.
     fjern(): void {
-        if (this.skjema.value.personnummer == " ") { this.skjema.patchValue({ personnummer: "" }); } 
-        if (this.skjema.value.mobiltelefon == " ") { this.skjema.patchValue({ mobiltelefon: "" }); } 
-        if (this.skjema.value.epost == " ") { this.skjema.patchValue({ epost: "" }); } 
+        //if (this.skjema.value.personnummer == " ") { this.skjema.patchValue({ personnummer: "" }); } 
+        //if (this.skjema.value.mobiltelefon == " ") { this.skjema.patchValue({ mobiltelefon: "" }); } 
+        //if (this.skjema.value.epost == " ") { this.skjema.patchValue({ epost: "" }); } 
         
         this.tomInput = false;
         this.melding = null;
