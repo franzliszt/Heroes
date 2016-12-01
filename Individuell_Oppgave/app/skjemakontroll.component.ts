@@ -186,7 +186,7 @@ export class SkjemaKontroll implements OnInit {
         this.service.slettSoknad(id)
             .subscribe(
             retur => {
-                if (retur[0]) {
+                if (retur) {
                     this.oppdaterSoknadsliste(retur);
                     this.visSkjema = false;
                     this.finnMinSoknad = false;

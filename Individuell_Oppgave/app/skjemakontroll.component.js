@@ -160,7 +160,7 @@ var SkjemaKontroll = (function () {
         var _this = this;
         this.service.slettSoknad(id)
             .subscribe(function (retur) {
-            if (retur[0]) {
+            if (retur) {
                 _this.oppdaterSoknadsliste(retur);
                 _this.visSkjema = false;
                 _this.finnMinSoknad = false;
