@@ -81,15 +81,9 @@ var SkjemaKontroll = (function () {
         var _this = this;
         this.laster = true;
         var soknad = this.opprettSoknad();
-        if (soknad.personnummer == "") {
-            this.skjema.patchValue({ personnummer: " " });
-        }
-        if (soknad.mobiltelefon == "") {
-            this.skjema.patchValue({ mobiltelefon: " " });
-        }
-        if (soknad.epost == "") {
-            this.skjema.patchValue({ epost: " " });
-        }
+        //if (soknad.personnummer == "") { this.skjema.patchValue({ personnummer: " " }); }
+        //if (soknad.mobiltelefon == "") { this.skjema.patchValue({ mobiltelefon: " " }); }
+        //if (soknad.epost == "") { this.skjema.patchValue({ epost: " " }); }
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
             this.melding = "Fyll ut alle feltene.";
             this.tomInput = true;

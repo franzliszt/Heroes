@@ -102,9 +102,9 @@ export class SkjemaKontroll implements OnInit {
     lagreSoknad(): void {
         this.laster = true;
         let soknad = this.opprettSoknad();
-        if (soknad.personnummer == "") { this.skjema.patchValue({ personnummer: " " }); }
-        if (soknad.mobiltelefon == "") { this.skjema.patchValue({ mobiltelefon: " " }); }
-        if (soknad.epost == "") { this.skjema.patchValue({ epost: " " }); }
+        //if (soknad.personnummer == "") { this.skjema.patchValue({ personnummer: " " }); }
+        //if (soknad.mobiltelefon == "") { this.skjema.patchValue({ mobiltelefon: " " }); }
+        //if (soknad.epost == "") { this.skjema.patchValue({ epost: " " }); }
 
         if (soknad.personnummer == "" || soknad.mobiltelefon == "" || soknad.epost == "") {
             
