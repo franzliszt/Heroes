@@ -68,7 +68,8 @@
         <form [formGroup]="skjema" class="register-form" (ngSubmit)="vedSubmit()">
             <input class="form-control" formControlName="id" type="hidden" #id />
             <label class="inputPersonalia">Personnummer</label>
-            <input class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" (click)="fjern()"/>
+            <input *ngIf="skjemaStatus=='registrer'" class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" (click)="fjern()"/>
+            <input *ngIf="skjemaStatus=='endre'" class="form-control" name="personnummer" formControlName="personnummer" placeholder="11 siffer" (click)="fjern()" readonly/>
             <p class="alert alert-warning" style="width:400px;"
                [hidden]="skjema.controls.personnummer.valid || (skjema.controls.personnummer.pristine && !submitted)">
                 Kun 11 siffer!
@@ -104,7 +105,7 @@
                     </button>
                 </div>
                 <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
-                    <button class="btn btn-default videreknapp" (click)="tilKalkulator()">Endre lånebeløpet her</button>
+                    <button class="btn btn-default videreknapp" (click)="tilKalkulator()">Endre lån</button>
                 </div>
             </div>
         </form>

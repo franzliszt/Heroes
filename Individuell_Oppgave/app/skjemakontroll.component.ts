@@ -290,6 +290,7 @@ export class SkjemaKontroll implements OnInit {
     }
 
     tilKalkulator(): void {
+        this.finnMinSoknad = false;
         this.visListe = false;
         this.visSkjema = false;
         this.visKalkulator = true;

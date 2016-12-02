@@ -252,6 +252,7 @@ var SkjemaKontroll = (function () {
         this.okBoks = false;
     };
     SkjemaKontroll.prototype.tilKalkulator = function () {
+        this.finnMinSoknad = false;
         this.visListe = false;
         this.visSkjema = false;
         this.visKalkulator = true;
