@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace Individuell_Oppgave.Models {
+namespace Individuell_Oppgave.MODEL {
     public class Soknad {
         public int id { get; set; }
         public string personnummer { get; set; }

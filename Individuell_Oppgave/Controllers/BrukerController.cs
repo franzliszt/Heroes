@@ -2,11 +2,12 @@
 using System.Net.Http;
 using System.Web.Http;
 using System.Text;
-using Individuell_Oppgave.Models;
+using Individuell_Oppgave.MODEL;
 using System.Web.Script.Serialization;
 using System.Diagnostics;
 using System.Net;
 using System.Collections.Generic;
+using Individuell_Oppgave.BLL;
 
 namespace Individuell_Oppgave.Controllers {
     public class BrukerController : ApiController {
@@ -14,7 +15,7 @@ namespace Individuell_Oppgave.Controllers {
         // Denne metoden henter alle søknader tilhørende en søker.
         [HttpGet]
         public HttpResponseMessage Get(string id) {
-            List<Soknad> mineSoknader = new DB().hentMineSoknader(id);
+            List<Soknad> mineSoknader = new DB_BLL().hentMineSoknader(id);
             if (mineSoknader != null) {
                 var json = new JavaScriptSerializer();
                 string jsonString = json.Serialize(mineSoknader);
@@ -38,7 +39,7 @@ namespace Individuell_Oppgave.Controllers {
         public HttpResponseMessage Post([FromBody]Soknad nySoknad) {
             if (ModelState.IsValid) {
                 // Returnerer søknaden for å gi søknadsnummeret til brukeren etter at den er lagret.
-                Soknad soknadsNr = new DB().lagre(nySoknad);
+                Soknad soknadsNr = new DB_BLL().lagre(nySoknad);
                 if (soknadsNr != null) {
                     var j = new JavaScriptSerializer();
                     string jsonstring = j.Serialize(soknadsNr);
@@ -56,7 +57,7 @@ namespace Individuell_Oppgave.Controllers {
         [HttpPut]
         public HttpResponseMessage Put([FromBody] Soknad s) {
             if (ModelState.IsValid) {
-                bool endret = new DB().endreSoknad(s);
+                bool endret = new DB_BLL().endreSoknad(s);
                 if (endret) {
                     return new HttpResponseMessage() {
                         StatusCode = HttpStatusCode.OK
@@ -72,9 +73,8 @@ namespace Individuell_Oppgave.Controllers {
         
         [HttpDelete]
         public HttpResponseMessage Delete(int id) {
-            var soknader = new DB().slettSoknad(id);
+            var soknader = new DB_BLL().slettSoknad(id);
             if (soknader != null) {
-                soknader.ForEach(s => Debug.WriteLine("XXXXXXXXXXXXXXXXX " + s.belop));
                 // sletting utført og returnerer oppdatert liste med søknader.
                 var json = new JavaScriptSerializer();
                 var jsonstring = json.Serialize(soknader);
@@ -82,7 +82,6 @@ namespace Individuell_Oppgave.Controllers {
                     Content = new StringContent(jsonstring, Encoding.UTF8, "application/json"), StatusCode = HttpStatusCode.OK
                 };
             }
-            
             return new HttpResponseMessage() {
                 StatusCode = HttpStatusCode.NotFound,
                 Content = new StringContent("Klarte ikke å slette søknaden")

@@ -1,4 +1,4 @@
-namespace Individuell_Oppgave.Models {
+namespace Individuell_Oppgave.DAL {
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.Data.Entity;

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
+using Individuell_Oppgave.MODEL;
 
-namespace Individuell_Oppgave.Models {
+namespace Individuell_Oppgave.DAL {
     public class DB {
-
-        // Fungerer, men burde returnere søknadsID.--string
         public Soknad lagre(Soknad nySoknad) {
             
             using (var db = new DatabaseContext()) {
@@ -53,7 +51,7 @@ namespace Individuell_Oppgave.Models {
             }
         }
 
-        // Fungerer
+        
         public bool endreSoknad(Soknad nySoknad) {
             using (var db = new DatabaseContext()) {
                 SoknadDB finnSoknad = db.Soknader.FirstOrDefault(s => s.SoknadsID == nySoknad.id);
@@ -68,7 +66,6 @@ namespace Individuell_Oppgave.Models {
                         db.SaveChanges();
                         return true;
                     } catch(Exception e) {
-                        // Logge til en fil
                         return false;
                     }
                 }
@@ -76,7 +73,7 @@ namespace Individuell_Oppgave.Models {
             return false;
         }
 
-        // fungerer
+        
         public List<Soknad> slettSoknad(int id) {
             using (var db = new DatabaseContext()) {
                 SoknadDB funnetSoknad = db.Soknader.FirstOrDefault(s => s.SoknadsID == id);
@@ -88,7 +85,6 @@ namespace Individuell_Oppgave.Models {
                     // henter oppdatert liste
                     return hentMineSoknader(tempPnr);
                 } catch (Exception e) {
-                    Console.WriteLine("En exception har oppstått: " + e.Message.ToString());
                     return null;
                 }
             }
