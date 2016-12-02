@@ -1,5 +1,5 @@
 Krav for å kjøre løsningen:
-Denne fungerer i Firefox, men ikke Chrome.
+Denne fungerer i Firefox versjon 50.0, men ikke Chrome.
 Så den må testes med nettleseren Firefox.
 Løsningen er testet på datamaskinen til en medstudent ved å sende en .zip med løsningen, dette fungerte.
 Hvis det av en eller annen grunn ikke fungerer, kan jeg låne bort min datamaskin i testperioden.

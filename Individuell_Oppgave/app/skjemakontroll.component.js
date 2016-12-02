@@ -102,7 +102,6 @@ var SkjemaKontroll = (function () {
         this.skjema.patchValue({ personnummer: soknad.personnummer });
         this.skjema.patchValue({ mobiltelefon: soknad.mobiltelefon });
         this.skjema.patchValue({ epost: soknad.epost });
-        //this.skjema.patchValue({ belop: soknad.belop });
         this.belop = soknad.belop;
         this.tid = soknad.nedbetalingstid;
         this.avdrag = soknad.avdragPrMnd;
@@ -222,9 +221,6 @@ var SkjemaKontroll = (function () {
         this.skjema.patchValue({ personnummer: "" });
         this.skjema.patchValue({ mobiltelefon: "" });
         this.skjema.patchValue({ epost: "" });
-        //this.skjema.patchValue({ belop: "" });
-        //this.skjema.patchValue({ nedbetalingstid: "" });
-        //this.skjema.patchValue({ avdrag: "" });
     };
     // Sjekker om noen felter er tomme.
     SkjemaKontroll.prototype.sjekkInput = function () {
@@ -246,10 +242,10 @@ var SkjemaKontroll = (function () {
         this.visKalkulator = false;
         this.visListe = true;
     };
-    // Sender til lånekalkulatoren.
+    // Sender tilbake til enten kalkulator eller oversikten over søknader avhengig av skjemastatus.
     SkjemaKontroll.prototype.tilbake = function () {
         this.fjern();
-        this.skjemaStatus == "endre" ? this.visListe = true : this.visKalkulator;
+        this.skjemaStatus == "endre" ? this.visListe = true : this.visKalkulator, this.settStartverdier();
         this.visListe ? !this.visKalkulator : this.visKalkulator = true, this.visSkjema = false;
         this.finnMinSoknad = false;
         this.status = false;
@@ -262,9 +258,6 @@ var SkjemaKontroll = (function () {
     };
     // Fjerner feilmelding ved tomme felter eller ikke registrert.
     SkjemaKontroll.prototype.fjern = function () {
-        //if (this.skjema.value.personnummer == " ") { this.skjema.patchValue({ personnummer: "" }); } 
-        //if (this.skjema.value.mobiltelefon == " ") { this.skjema.patchValue({ mobiltelefon: "" }); } 
-        //if (this.skjema.value.epost == " ") { this.skjema.patchValue({ epost: "" }); } 
         this.tomInput = false;
         this.melding = null;
     };

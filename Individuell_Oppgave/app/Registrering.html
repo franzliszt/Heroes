@@ -85,9 +85,6 @@
                [hidden]="skjema.controls.epost.valid || (skjema.controls.epost.pristine && !submitted)">
                 Ugyldig epost!
             </p>
-            <!--<input type="hidden" class="form-control" name="nedbetalingstid" formControlName="nedbetalingstid" placeholder="8 siffer" />
-            <input type="hidden" class="form-control" name="belop" formControlName="belop" placeholder="8 siffer" />
-            <input type="hidden" class="form-control" name="avdrag" formControlName="avdrag" placeholder="8 siffer" />-->
             <p *ngIf="tomInput" id="skjemafeil" >{{melding}}</p>
             <p style="color:#eaeaea;">Nedbetaling over {{tid}} år. Avdrag {{avdrag}} kr/mnd.</p>
             <hr />
