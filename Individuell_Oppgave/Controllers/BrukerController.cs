@@ -12,7 +12,7 @@ using Individuell_Oppgave.BLL;
 namespace Individuell_Oppgave.Controllers {
     public class BrukerController : ApiController {
         
-        // Denne metoden henter alle søknader tilhørende en søker.
+        // Denne metoden henter alle søknader tilhørende en søker. Input parameter id er personnummeret.
         [HttpGet]
         public HttpResponseMessage Get(string id) {
             List<Soknad> mineSoknader = new DB_BLL().hentMineSoknader(id);
@@ -79,7 +79,8 @@ namespace Individuell_Oppgave.Controllers {
                 var json = new JavaScriptSerializer();
                 var jsonstring = json.Serialize(soknader);
                 return new HttpResponseMessage() {
-                    Content = new StringContent(jsonstring, Encoding.UTF8, "application/json"), StatusCode = HttpStatusCode.OK
+                    Content = new StringContent(jsonstring, Encoding.UTF8, "application/json"),
+                    StatusCode = HttpStatusCode.OK
                 };
             }
             return new HttpResponseMessage() {

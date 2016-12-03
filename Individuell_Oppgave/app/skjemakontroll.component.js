@@ -98,6 +98,7 @@ var SkjemaKontroll = (function () {
     };
     // Henter en spesifikk søknad som skal endres og fyller ut skjemaet.
     SkjemaKontroll.prototype.visMinSoknad = function (soknad) {
+        this.fjern();
         this.skjema.patchValue({ id: soknad.id });
         this.skjema.patchValue({ personnummer: soknad.personnummer });
         this.skjema.patchValue({ mobiltelefon: soknad.mobiltelefon });

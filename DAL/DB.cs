@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Individuell_Oppgave.MODEL;
 
 namespace Individuell_Oppgave.DAL {
     public class DB {
         public Soknad lagre(Soknad nySoknad) {
-            
             using (var db = new DatabaseContext()) {
-                
                 var s = new SoknadDB() {
                     Personnummer = nySoknad.personnummer,
                     Mobiltelefon = nySoknad.mobiltelefon,
@@ -93,7 +90,6 @@ namespace Individuell_Oppgave.DAL {
         // henter alle søknader registrert på et personnummer
         public List<Soknad> hentMineSoknader(string pnr) {
             using (var db = new DatabaseContext()) {
-
                 var listeFraDB = db.Soknader.Where(p => p.Personnummer.Equals(pnr)).ToList();
                 if (listeFraDB == null) { return null; }
 

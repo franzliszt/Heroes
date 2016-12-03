@@ -122,6 +122,7 @@ export class SkjemaKontroll implements OnInit {
 
     // Henter en spesifikk søknad som skal endres og fyller ut skjemaet.
     visMinSoknad(soknad: Soknad): void {
+        this.fjern();
         this.skjema.patchValue({ id: soknad.id });
         this.skjema.patchValue({ personnummer: soknad.personnummer });
         this.skjema.patchValue({ mobiltelefon: soknad.mobiltelefon });
