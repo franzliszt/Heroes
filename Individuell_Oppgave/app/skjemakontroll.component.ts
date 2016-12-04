@@ -109,8 +109,8 @@ export class SkjemaKontroll implements OnInit {
         } else {
             this.service.lagreSoknad(soknad).subscribe(
                 retur => {
-                    this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                        "Bruk ditt personnummer for å se dine søknader.");
+                    this.ok("Søknad lagret med søknadsnummer " + retur.id +
+                        ".\nBruk ditt personnummer for å se dine søknader.");
                     this.settStartverdier();
                 },
                 error => {
@@ -144,20 +144,18 @@ export class SkjemaKontroll implements OnInit {
             this.tomInput = true;
         } else {
             this.service.hentMineSoknader(pnr).subscribe(soknader => {
-                if (soknader[0] != null) {
                     this.oppdaterSoknadsliste(soknader);
                     this.skjemaStatus = "endre";
                     this.visSkjema = false;
                     this.visKalkulator = false;
                     this.finnMinSoknad = false;
                     this.visListe = true;
-                } else {
-                    this.tomInput = true;
-                    this.skjema.patchValue({ personnummer: "" });
-                    this.melding = "Du er ikke registrert.";
-                }
             },
-                error => this.statusmelding("Klarte ikke hente din informasjon."));
+            error => {
+                this.tomInput = true;
+                this.skjema.patchValue({ personnummer: "" });
+                this.melding = "Fant ingen informasjon.";
+            });
         }
     }
 

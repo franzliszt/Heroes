@@ -9,20 +9,14 @@ import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class SkjemaService {
-    private url: string = "api/bruker";
     private headers = new Headers({ "Content-Type": "application/json" });
     private options = new RequestOptions({ headers: this.headers });
 
    constructor(private _http: Http) {}
 
-   private feil(error: any): Promise<any> {
-       return Promise.reject(error.message || error);
-   }
-
    hentMineSoknader(id: string): any {
        return this._http.get("api/Bruker/" + id)
            .map((returdata: Response) => returdata.json())
-           .catch((error: any) => Observable.throw(error.json().error || "Feil med server."));
    }
 
    // Lagrer en søknad. -- (fortsetter å feile)
@@ -31,7 +25,6 @@ export class SkjemaService {
 
        return this._http.post("api/Bruker", body, this.options)
            .map((returData: Response) => returData.json())
-           .catch((error: any) => Observable.throw(error.json().error || "Feil med server."));
    }
 
    // Endrer søknad -- fungerer
@@ -45,7 +38,6 @@ export class SkjemaService {
    hentSoknad(id): any {
        return this._http.get("api/Bruker/" + id)
            .map((returdata: Response) => returdata.json())
-           .catch((error: any) => Observable.throw(error.json().error || "Feil med server."));
    }
 
    // fungerer, men må skrives om

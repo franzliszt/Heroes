@@ -9,10 +9,6 @@ namespace Individuell_Oppgave.BLL {
             return new DB().lagre(nySoknad);
         }
 
-        public Soknad hentMinSoknad(int id) {
-            return new DB().hentMinSoknad(id);
-        }
-
         public bool endreSoknad(Soknad nySoknad) {
             return new DB().endreSoknad(nySoknad);
         }

@@ -11,7 +11,7 @@ using Individuell_Oppgave.BLL;
 
 namespace Individuell_Oppgave.Controllers {
     public class BrukerController : ApiController {
-        
+
         // Denne metoden henter alle søknader tilhørende en søker. Input parameter id er personnummeret.
         [HttpGet]
         public HttpResponseMessage Get(string id) {
@@ -26,15 +26,10 @@ namespace Individuell_Oppgave.Controllers {
                 };
             }
             return new HttpResponseMessage() {
-                StatusCode = HttpStatusCode.BadRequest,
-                Content = new StringContent("Fant ingen søknader som samsvarte med personnummeret.")
+                StatusCode = HttpStatusCode.BadRequest
             };
-
         }
 
-        // lagrer en søknad
-
-        // LAGRE
         [HttpPost]
         public HttpResponseMessage Post([FromBody]Soknad nySoknad) {
             if (ModelState.IsValid) {
@@ -44,13 +39,13 @@ namespace Individuell_Oppgave.Controllers {
                     var j = new JavaScriptSerializer();
                     string jsonstring = j.Serialize(soknadsNr);
                     return new HttpResponseMessage() {
-                        Content = new StringContent(jsonstring, Encoding.UTF8, "application/json"), StatusCode = HttpStatusCode.OK
+                        Content = new StringContent(jsonstring, Encoding.UTF8, "application/json"),
+                        StatusCode = HttpStatusCode.OK
                     };
                 }
             }
             return new HttpResponseMessage() {
-                StatusCode = HttpStatusCode.BadRequest,
-                Content = new StringContent("Feil i registring av søknad.")
+                StatusCode = HttpStatusCode.BadRequest
             };
         }
 
@@ -65,12 +60,11 @@ namespace Individuell_Oppgave.Controllers {
                 }
             }
             return new HttpResponseMessage() {
-                StatusCode = HttpStatusCode.NotFound,
-                Content = new StringContent("Klarte ikke endre søknad.")
+                StatusCode = HttpStatusCode.NotFound
             };
         }
 
-        
+
         [HttpDelete]
         public HttpResponseMessage Delete(int id) {
             var soknader = new DB_BLL().slettSoknad(id);
@@ -84,8 +78,7 @@ namespace Individuell_Oppgave.Controllers {
                 };
             }
             return new HttpResponseMessage() {
-                StatusCode = HttpStatusCode.NotFound,
-                Content = new StringContent("Klarte ikke å slette søknaden")
+                StatusCode = HttpStatusCode.NotFound
             };
         }
     }

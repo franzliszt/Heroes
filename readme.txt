@@ -1,26 +1,28 @@
 Krav for å kjøre løsningen:
-Denne fungerer i Firefox versjon 50.0, men ikke Chrome.
+Denne fungerer i Firefox (versjon 50.0), men ikke Chrome.
 Så den må testes med nettleseren Firefox.
-Løsningen er testet på datamaskinen til en medstudent ved å sende en .zip med løsningen, dette fungerte.
-Hvis det av en eller annen grunn ikke fungerer, kan jeg låne bort min datamaskin i testperioden.
+Løsningen er testet på datamaskinen til en medstudent ved å sende en .zip med løsningen, dette fungerte (i Firefox).
+Hvis det av en eller annen grunn ikke fungerer, kan jeg evt. låne bort min datamaskin i testperioden.
 
-Valg av funksjonalitet:
-En bruker som ikke har noen søknader registrert i databasen
-kan ikke få informasjon om sine søknader ved å benytte personnummer. Det betyr at dersom en søker har opprettet søknader
-og deretter sletter alle sine søknader, vil en bruker ikke lenger eksistere i databasen. 
-Etter at "Avslutt" knappen er trykket er det ikke mulig å benytte sitt personnummer for å vise brukerens søknader. 
-Derfor får brukeren melding om at han/hun ikke er registrert.
-Kunne muligens ha valgt å lage en egen tabell (i db) med historikk, men så ikke nødvendigheten av dette i denne oppgaven.
+Valg:
+En bruker som har en søknad registrert kan, ved å benytte personnummeret søknaden er registrert på, komme inn
+på siden som viser alle søknadene. Denne kan være tom dersom brukeren har slettet sine søknader.
+Jeg har valgt å ta vare på alle kunder som har registrert søknader. Personer som ikke har
+registrert noen søknader vil ikke være listet i databasen og kommer derfor ikke inn på siden som
+viser oversikt over søknader (hvis brukeren har noen). En bruker som har slettet sine søknader
+vil kunne komme inn på denne siden fordi brukeren er registrert i databasen, viser da en tom tabell.
+På den måten kan man som en fremtidig administrator få oversikt over alle som har eller har hatt
+søknader.
 
-Jeg har valgt å gi tilbakemeldinger i form av egne "bokser" ved fullført lagring av søknad og evt. feilmeldinger, da
-jeg så det som mest ryddig i denne løsningen.
+Ved å trykke endre-knappen på en søknad har jeg valgt å gjøre feltet med
+personnummer readonly. Vil ikke gi brukeren mulighet til å endre søknadens personnummer.
+En bruker er ansvarlig for egne handlinger, så om slett-knappen trykkes, da slettes søknaden, men ikke søkeren.
 
 Kode.
-Av kode som ikke jeg selv har laget så er det css-koden til de to <input type="range".... /> (slider).
-Jeg har kun gått inn i css her for å gjøre noen endringer.
+Jeg har lånt litt css for slidere, det er en blanding av min egen og noe hjelp fra internett.
+Resten er mitt verk, fra lærer og fra Angular2-siden.
 
-Resten er fra mitt eget hode og faglærer.
-
+Har lagt ved en video av demo. Fungerer å spille av i vlc.
 
 
 

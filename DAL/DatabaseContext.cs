@@ -8,6 +8,7 @@ namespace Individuell_Oppgave.DAL {
 
     public class DatabaseContext : DbContext {
         public DbSet<SoknadDB> Soknader { get; set; }
+        public DbSet<PersonDB> Personer { get; set; }
 
         public DatabaseContext()
             : base("name=DatabaseContext") {
@@ -21,11 +22,16 @@ namespace Individuell_Oppgave.DAL {
     public class SoknadDB {
         [Key]
         public int SoknadsID { get; set; }
-        public string Personnummer { get; set; }
-        public string Mobiltelefon { get; set; }
-        public string Epost { get; set; }
         public int Belop { get; set; }
         public double AvdragPrMnd { get; set; }
         public int Nedbetalingstid { get; set; }
+        public string Personnummer { get; set; }
+    }
+
+    public class PersonDB {
+        [Key]
+        public string Personnummer { get; set; }
+        public string Mobiltelefon { get; set; }
+        public string Epost { get; set; }
     }
 }

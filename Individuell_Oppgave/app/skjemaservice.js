@@ -12,28 +12,21 @@ var http_1 = require("@angular/http");
 var core_1 = require("@angular/core");
 require("rxjs/add/operator/toPromise");
 require('rxjs/add/operator/catch');
-var Observable_1 = require('rxjs/Observable');
 var SkjemaService = (function () {
     function SkjemaService(_http) {
         this._http = _http;
-        this.url = "api/bruker";
         this.headers = new http_1.Headers({ "Content-Type": "application/json" });
         this.options = new http_1.RequestOptions({ headers: this.headers });
     }
-    SkjemaService.prototype.feil = function (error) {
-        return Promise.reject(error.message || error);
-    };
     SkjemaService.prototype.hentMineSoknader = function (id) {
         return this._http.get("api/Bruker/" + id)
-            .map(function (returdata) { return returdata.json(); })
-            .catch(function (error) { return Observable_1.Observable.throw(error.json().error || "Feil med server."); });
+            .map(function (returdata) { return returdata.json(); });
     };
     // Lagrer en søknad. -- (fortsetter å feile)
     SkjemaService.prototype.lagreSoknad = function (soknad) {
         var body = JSON.stringify(soknad);
         return this._http.post("api/Bruker", body, this.options)
-            .map(function (returData) { return returData.json(); })
-            .catch(function (error) { return Observable_1.Observable.throw(error.json().error || "Feil med server."); });
+            .map(function (returData) { return returData.json(); });
     };
     // Endrer søknad -- fungerer
     SkjemaService.prototype.endreSoknad = function (endretSoknad) {
@@ -44,8 +37,7 @@ var SkjemaService = (function () {
     // Henter en søknad -- fungerer
     SkjemaService.prototype.hentSoknad = function (id) {
         return this._http.get("api/Bruker/" + id)
-            .map(function (returdata) { return returdata.json(); })
-            .catch(function (error) { return Observable_1.Observable.throw(error.json().error || "Feil med server."); });
+            .map(function (returdata) { return returdata.json(); });
     };
     // fungerer, men må skrives om
     SkjemaService.prototype.slettSoknad = function (id) {

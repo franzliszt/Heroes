@@ -87,8 +87,8 @@ var SkjemaKontroll = (function () {
         }
         else {
             this.service.lagreSoknad(soknad).subscribe(function (retur) {
-                _this.ok("Søknad lagret med søknadsnummer " + retur.id + ".\n" +
-                    "Bruk ditt personnummer for å se dine søknader.");
+                _this.ok("Søknad lagret med søknadsnummer " + retur.id +
+                    ".\nBruk ditt personnummer for å se dine søknader.");
                 _this.settStartverdier();
             }, function (error) {
                 _this.statusmelding("Klarte ikke å lagre.");
@@ -120,20 +120,17 @@ var SkjemaKontroll = (function () {
         }
         else {
             this.service.hentMineSoknader(pnr).subscribe(function (soknader) {
-                if (soknader[0] != null) {
-                    _this.oppdaterSoknadsliste(soknader);
-                    _this.skjemaStatus = "endre";
-                    _this.visSkjema = false;
-                    _this.visKalkulator = false;
-                    _this.finnMinSoknad = false;
-                    _this.visListe = true;
-                }
-                else {
-                    _this.tomInput = true;
-                    _this.skjema.patchValue({ personnummer: "" });
-                    _this.melding = "Du er ikke registrert.";
-                }
-            }, function (error) { return _this.statusmelding("Klarte ikke hente din informasjon."); });
+                _this.oppdaterSoknadsliste(soknader);
+                _this.skjemaStatus = "endre";
+                _this.visSkjema = false;
+                _this.visKalkulator = false;
+                _this.finnMinSoknad = false;
+                _this.visListe = true;
+            }, function (error) {
+                _this.tomInput = true;
+                _this.skjema.patchValue({ personnummer: "" });
+                _this.melding = "Fant ingen informasjon.";
+            });
         }
     };
     // Endrer søknad og gjør et kall for å hente oppdatert søknadsliste for en bruker.
