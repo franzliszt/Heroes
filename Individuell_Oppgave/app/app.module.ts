@@ -4,9 +4,7 @@ import { FormsModule } from "@angular/forms";
 import { HttpModule, JsonpModule } from "@angular/http";
 import { ReactiveFormsModule } from "@angular/forms";
 
-import { SkjemaKontroll } from "./skjemakontroll.component";
 import { AppComponent } from "./app.component";
-import { SkjemaService } from "./skjemaservice";
 
 
 @NgModule({
@@ -18,10 +16,8 @@ import { SkjemaService } from "./skjemaservice";
         ReactiveFormsModule
     ],
     declarations: [
-        AppComponent,
-        SkjemaKontroll
+        AppComponent
     ],
-    providers: [SkjemaService],
     bootstrap: [AppComponent]
 })
 

@@ -13,9 +13,7 @@ var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require("@angular/forms");
 var http_1 = require("@angular/http");
 var forms_2 = require("@angular/forms");
-var skjemakontroll_component_1 = require("./skjemakontroll.component");
 var app_component_1 = require("./app.component");
-var skjemaservice_1 = require("./skjemaservice");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -29,10 +27,8 @@ var AppModule = (function () {
                 forms_2.ReactiveFormsModule
             ],
             declarations: [
-                app_component_1.AppComponent,
-                skjemakontroll_component_1.SkjemaKontroll
+                app_component_1.AppComponent
             ],
-            providers: [skjemaservice_1.SkjemaService],
             bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])
